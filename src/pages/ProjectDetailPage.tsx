@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { projectBySlugQuery } from '@/sanity/queries/project'
 import { urlFor } from '@/sanity/lib/image'
@@ -7,13 +7,33 @@ import { PortableTextRenderer } from '@/components/molecules/PortableTextRendere
 import { Lightbox } from '@/components/molecules/Lightbox'
 import type { Project } from '@/sanity/types'
 
+function BackToWork() {
+  const navigate = useNavigate()
+  function goBack() {
+    if (window.history.length > 2) {
+      navigate(-1)
+    } else {
+      sessionStorage.setItem('_pendingScroll', 'work')
+      navigate('/')
+    }
+  }
+  return (
+    <button
+      onClick={goBack}
+      className="text-sm text-earth-sage hover:text-earth-forest transition-colors duration-300 mb-8 inline-block"
+    >
+      ← Back to work
+    </button>
+  )
+}
+
 export function ProjectDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: project, loading } = useSanity<Project>(projectBySlugQuery, { slug })
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
-  const allImages = project
-    ? [project.coverImage, ...(project.gallery ?? [])].filter(Boolean)
+  const allImages: NonNullable<typeof project>['gallery'] = project
+    ? [...(project.coverImage ? [project.coverImage] : []), ...(project.gallery ?? [])]
     : []
 
   const openLightbox = (i: number) => setLightboxIndex(i)
@@ -51,9 +71,7 @@ export function ProjectDetailPage() {
       <main className="min-h-screen bg-earth-cream pt-24 flex items-center justify-center">
         <div className="text-center">
           <p className="text-earth-forest/40 mb-4">Project not found.</p>
-          <Link to="/work" className="text-earth-terracotta underline underline-offset-4 text-sm">
-            ← Back to work
-          </Link>
+          <BackToWork />
         </div>
       </main>
     )
@@ -73,7 +91,7 @@ export function ProjectDetailPage() {
         >
           <img
             src={coverUrl}
-            alt={project.coverImage.alt ?? project.title}
+            alt={project.coverImage?.alt ?? project.title}
             className="w-full h-full object-cover"
             loading="eager"
           />
@@ -83,12 +101,7 @@ export function ProjectDetailPage() {
 
       <div className="mx-auto max-w-[1120px] px-6 py-16">
         {/* Back link */}
-        <Link
-          to="/work"
-          className="text-sm text-earth-sage hover:text-earth-forest transition-colors duration-300 mb-8 inline-block"
-        >
-          ← Back to work
-        </Link>
+        <BackToWork />
 
         {/* Title */}
         <h1 className="font-serif italic text-5xl md:text-6xl text-earth-forest tracking-[-0.02em] leading-[1.1] mb-12">

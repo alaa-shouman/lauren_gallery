@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { urlFor } from '@/sanity/lib/image'
 import { useSanity } from '@/hooks/useSanity'
 import { heroQuery } from '@/sanity/queries/hero'
@@ -19,6 +18,7 @@ export function HeroSection() {
 
   return (
     <section
+      id="hero"
       className={cn(
         'relative min-h-screen flex items-center overflow-hidden',
         loading ? 'bg-earth-cream' : bg
@@ -60,8 +60,8 @@ export function HeroSection() {
               {hero?.subheadline ?? 'Handmade ceramics, textiles, and surface work rooted in natural materials and honest process.'}
             </p>
 
-            <Link
-              to={hero?.ctaHref ?? '/work'}
+            <button
+              onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
               className={cn(
                 'inline-block px-8 py-3.5 rounded-full text-sm font-medium',
                 'bg-earth-terracotta text-white',
@@ -70,7 +70,7 @@ export function HeroSection() {
               )}
             >
               {hero?.ctaLabel ?? 'View my work'}
-            </Link>
+            </button>
           </div>
 
           {/* Right: image */}

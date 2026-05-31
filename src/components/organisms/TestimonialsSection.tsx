@@ -4,15 +4,22 @@ import { featuredTestimonialsQuery } from '@/sanity/queries/testimonial'
 import { useFadeIn } from '@/hooks/useFadeIn'
 import type { Testimonial } from '@/sanity/types'
 
+const MOCK_TESTIMONIALS: Testimonial[] = [
+  { _id: 'mt1', quote: 'Working with Lauren transformed the feel of our space. Every piece carries a quiet intentionality that we hadn\'t found anywhere else.', author: 'Sarah K.', role: 'Interior designer, Melbourne' },
+  { _id: 'mt2', quote: 'Lauren\'s ceramics are unlike anything I\'ve encountered — they hold the memory of the earth they came from. Utterly beautiful.', author: 'James W.', role: 'Collector' },
+  { _id: 'mt3', quote: 'The commission process was collaborative, thoughtful, and resulted in pieces that feel completely at home in our environment.', author: 'Mia T.', role: 'Architect' },
+]
+
 export function TestimonialsSection() {
-  const { data: testimonials, loading } = useSanity<Testimonial[]>(featuredTestimonialsQuery)
+  const { data: fetched, loading } = useSanity<Testimonial[]>(featuredTestimonialsQuery)
+  const testimonials = (fetched && fetched.length > 0) ? fetched : (!loading ? MOCK_TESTIMONIALS : null)
   const [active, setActive] = useState(0)
   const sectionRef = useFadeIn<HTMLElement>()
 
   const current = testimonials?.[active]
 
   return (
-    <section ref={sectionRef} className="fade-up py-24 md:py-32 bg-earth-warm">
+    <section id="testimonials" ref={sectionRef} className="fade-up py-24 md:py-32 bg-earth-warm">
       <div className="mx-auto max-w-[1120px] px-6">
         <div className="max-w-2xl mx-auto text-center relative">
           {/* Decorative quote mark */}

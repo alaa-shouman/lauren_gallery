@@ -27,7 +27,7 @@ export function ProjectCard({ project, className, priority = false }: ProjectCar
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={project.coverImage.alt ?? project.title}
+            alt={project.coverImage?.alt ?? project.title}
             loading={priority ? 'eager' : 'lazy'}
             className="w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.04]"
           />

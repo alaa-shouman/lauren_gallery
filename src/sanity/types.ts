@@ -39,7 +39,7 @@ export interface Project {
   slug: { current: string }
   category: string
   year: number
-  coverImage: SanityImage
+  coverImage?: SanityImage
   gallery?: SanityImage[]
   description?: unknown[]
   materials?: string[]

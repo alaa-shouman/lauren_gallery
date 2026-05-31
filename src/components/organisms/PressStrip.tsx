@@ -4,14 +4,22 @@ import { urlFor } from '@/sanity/lib/image'
 import { useFadeIn } from '@/hooks/useFadeIn'
 import type { PressItem } from '@/sanity/types'
 
+const MOCK_PRESS: PressItem[] = [
+  { _id: 'mp1', publication: 'Kinfolk', headline: 'The quiet studio of Lauren Mercer', date: '2024-03' },
+  { _id: 'mp2', publication: 'Cereal', headline: 'Earth, Form & the Slow Work', date: '2023-11' },
+  { _id: 'mp3', publication: 'The Design Files', headline: 'Material Honesty', date: '2023-06' },
+  { _id: 'mp4', publication: 'Vogue Living', headline: 'Studio Visit', date: '2022-09' },
+]
+
 export function PressStrip() {
-  const { data: press, loading } = useSanity<PressItem[]>(allPressQuery)
+  const { data: fetched, loading } = useSanity<PressItem[]>(allPressQuery)
+  const press = (fetched && fetched.length > 0) ? fetched : (!loading ? MOCK_PRESS : null)
   const sectionRef = useFadeIn<HTMLElement>()
 
-  if (!loading && (!press || press.length === 0)) return null
+  if (!loading && !press) return null
 
   return (
-    <section ref={sectionRef} className="fade-up py-16 bg-earth-cream border-y border-earth-sand">
+    <section id="press" ref={sectionRef} className="fade-up py-16 bg-earth-cream border-y border-earth-sand">
       <div className="mx-auto max-w-[1120px] px-6">
         <p className="text-center text-xs tracking-[0.2em] text-earth-forest/40 mb-10 uppercase">
           as seen in

@@ -1,17 +1,38 @@
-import { Link } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import type { SiteSettings } from '@/sanity/types'
 
+function scrollToSection(sectionId: string) {
+  document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+}
+
 export function Footer() {
   const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isHome = location.pathname === '/'
+
+  function handleFooterLink(sectionId: string) {
+    if (isHome) {
+      scrollToSection(sectionId)
+    } else {
+      sessionStorage.setItem('_pendingScroll', sectionId)
+      navigate('/')
+    }
+  }
 
   return (
     <footer className="bg-earth-forest text-earth-cream">
       <div className="mx-auto max-w-[1120px] px-6 py-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div>
-            <p className="font-serif italic text-2xl mb-3 text-earth-cream">Lauren Mercer</p>
+            <button
+              onClick={() => handleFooterLink('hero')}
+              className="font-serif italic text-2xl mb-3 text-earth-cream hover:text-earth-terracotta transition-colors duration-300"
+            >
+              Lauren Mercer
+            </button>
             <p className="text-earth-cream/50 text-sm leading-relaxed max-w-xs">
               {settings?.footerTagline ?? 'earth · texture · form'}
             </p>
@@ -19,18 +40,14 @@ export function Footer() {
 
           <div className="flex flex-col md:items-end gap-4">
             <nav className="flex gap-6">
-              {[
-                { label: 'work', href: '/work' },
-                { label: 'about', href: '/about' },
-                { label: 'contact', href: '/contact' },
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
+              {(['work', 'about', 'contact'] as const).map((section) => (
+                <button
+                  key={section}
+                  onClick={() => handleFooterLink(section)}
                   className="text-sm text-earth-cream/60 hover:text-earth-cream transition-colors duration-300"
                 >
-                  {link.label}
-                </Link>
+                  {section}
+                </button>
               ))}
             </nav>
 
