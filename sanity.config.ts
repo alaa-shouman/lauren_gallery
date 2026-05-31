@@ -10,35 +10,11 @@ const structure = (S: StructureBuilder) =>
   S.list()
     .title("Content")
     .items([
-      S.listItem()
-        .title("Content")
-        .child(
-          S.list()
-            .title("Content")
-            .items([
-              S.listItem().title("Hero").child(S.document().schemaType("hero").documentId("hero")),
-              S.listItem().title("About").child(S.document().schemaType("about").documentId("about")),
-              S.listItem().title("Site Settings").child(S.document().schemaType("siteSettings").documentId("siteSettings")),
-            ]),
-        ),
-      S.listItem()
-        .title("Work")
-        .child(
-          S.list()
-            .title("Work")
-            .items([
-              S.documentTypeListItem("experience").title("Experience"),
-              S.documentTypeListItem("project").title("Projects"),
-              S.documentTypeListItem("collection").title("Collections"),
-            ]),
-        ),
-      S.listItem()
-        .title("Social Proof")
-        .child(
-          S.list()
-            .title("Social Proof")
-            .items([S.documentTypeListItem("testimonial").title("Testimonials"), S.documentTypeListItem("press").title("Press")]),
-        ),
+      S.listItem().title("Hero").child(S.document().schemaType("hero").documentId("hero")),
+      S.listItem().title("About").child(S.document().schemaType("about").documentId("about")),
+      S.listItem().title("Site Settings").child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+      S.divider(),
+      S.documentTypeListItem("experience").title("Experience"),
     ]);
 
 export default defineConfig({

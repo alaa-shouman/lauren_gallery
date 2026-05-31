@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { Nav, Footer } from '@/components/organisms'
 import { HomePage } from '@/pages/HomePage'
-import { ProjectDetailPage } from '@/pages/ProjectDetailPage'
 import { ExperienceDetailPage } from '@/pages/ExperienceDetailPage'
 
 function ScrollToTop() {
@@ -52,8 +51,7 @@ export default function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/work/:slug" element={<ProjectDetailPage />} />
-          <Route path="/experience/:slug" element={<ExperienceDetailPage />} />
+<Route path="/experience/:slug" element={<ExperienceDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>

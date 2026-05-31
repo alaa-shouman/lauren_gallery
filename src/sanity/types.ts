@@ -10,16 +10,11 @@ export interface SanityImage {
 }
 
 export interface HeroData {
-  tagline: string
   headline: string
   headlineItalic?: string
   headlineSuffix?: string
   subheadline: string
   tags?: string[]
-  ctaLabel: string
-  ctaHref: string
-  backgroundTone: 'cream' | 'warm' | 'forest'
-  heroImage: SanityImage
 }
 
 export interface ProcessStep {
@@ -34,20 +29,6 @@ export interface AboutData {
   processSteps?: ProcessStep[]
   portrait: SanityImage
   signatureImage?: SanityImage
-}
-
-export interface Project {
-  _id: string
-  title: string
-  slug: { current: string }
-  category: string
-  year: number
-  coverImage?: SanityImage
-  gallery?: SanityImage[]
-  description?: unknown[]
-  materials?: string[]
-  dimensions?: string
-  featured?: boolean
 }
 
 export interface Experience {
@@ -66,24 +47,6 @@ export interface Experience {
   coverImage?: SanityImage
   gallery?: SanityImage[]
   externalUrl?: string
-}
-
-export interface Testimonial {
-  _id: string
-  quote: string
-  author: string
-  role: string
-  avatar?: SanityImage
-}
-
-export interface PressItem {
-  _id: string
-  publication: string
-  headline: string
-  excerpt?: string
-  url?: string
-  date?: string
-  logo?: SanityImage
 }
 
 export interface SocialLink {
