@@ -86,6 +86,25 @@ export const experienceSchema = defineType({
       ],
     }),
     defineField({
+      name: 'role',
+      title: 'Role / Position',
+      type: 'string',
+      description: 'e.g. "Senior Designer" or "Interior Lead"',
+    }),
+    defineField({
+      name: 'footprint',
+      title: 'Footprint / Size',
+      type: 'string',
+      description: 'e.g. "220 m²" or "3 floors"',
+    }),
+    defineField({
+      name: 'materials',
+      title: 'Materials',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'e.g. "Lime-washed plaster", "Travertine"',
+    }),
+    defineField({
       name: 'externalUrl',
       title: 'External Link',
       type: 'url',

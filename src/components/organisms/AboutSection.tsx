@@ -42,7 +42,7 @@ export function AboutSection() {
               ) : portraitUrl ? (
                 <img
                   src={portraitUrl}
-                  alt={about?.portrait.alt ?? 'Lauren Mercer'}
+                  alt={about?.portrait.alt ?? 'Lauren Khafaji'}
                   className="w-full aspect-[3/4] object-cover rounded-2xl shadow-[0_2px_20px_rgba(28,46,36,0.08)]"
                   loading="lazy"
                 />
@@ -59,7 +59,7 @@ export function AboutSection() {
                 {about?.sectionLabel ?? 'the maker'}
               </p>
               <h2 className="font-serif italic text-5xl md:text-6xl text-earth-forest tracking-[-0.02em] leading-[1.1] mb-10">
-                About Lauren Mercer
+                About Lauren Khafaji
               </h2>
 
               {loading ? (
@@ -72,7 +72,7 @@ export function AboutSection() {
                 <PortableTextRenderer value={about.bio} />
               ) : (
                 <p className="text-earth-forest/65 font-light leading-relaxed">
-                  Lauren Mercer is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
+                  Lauren Khafaji is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
                   <br /><br />
                   Based in the hills, she draws from the quiet rhythms of nature: the texture of bark, the weight of river stones, the way light falls through linen. Her work is an invitation to slow down and notice.
                 </p>
@@ -81,7 +81,7 @@ export function AboutSection() {
               {about?.signatureImage?.asset && (
                 <img
                   src={urlFor(about.signatureImage).height(80).url()}
-                  alt={about.signatureImage.alt ?? 'Lauren Mercer signature'}
+                  alt={about.signatureImage.alt ?? 'Lauren Khafaji signature'}
                   className="mt-8 h-16 object-contain opacity-60"
                 />
               )}

@@ -37,7 +37,7 @@ export function AboutPage() {
               ) : portraitUrl ? (
                 <img
                   src={portraitUrl}
-                  alt={about?.portrait.alt ?? 'Lauren Mercer'}
+                  alt={about?.portrait.alt ?? 'Lauren Khafaji'}
                   className="w-full aspect-[3/4] object-cover rounded-2xl shadow-[0_2px_20px_rgba(28,46,36,0.08)]"
                   loading="eager"
                 />
@@ -52,7 +52,7 @@ export function AboutPage() {
                 {about?.sectionLabel ?? 'the maker'}
               </p>
               <h1 className="font-serif italic text-5xl md:text-6xl text-earth-forest tracking-[-0.02em] leading-[1.1] mb-10">
-                About Lauren Mercer
+                About Lauren Khafaji
               </h1>
 
               {loading ? (
@@ -67,7 +67,7 @@ export function AboutPage() {
                 </div>
               ) : (
                 <p className="text-earth-forest/65 font-light leading-relaxed">
-                  Lauren Mercer is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
+                  Lauren Khafaji is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
                 </p>
               )}
 
@@ -75,7 +75,7 @@ export function AboutPage() {
               {about?.signatureImage?.asset && (
                 <img
                   src={urlFor(about.signatureImage).height(80).url()}
-                  alt={about.signatureImage.alt ?? 'Lauren Mercer signature'}
+                  alt={about.signatureImage.alt ?? 'Lauren Khafaji signature'}
                   className="mt-8 h-16 object-contain opacity-60"
                 />
               )}

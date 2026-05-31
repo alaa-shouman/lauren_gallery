@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sanity:dev": "sanity dev",
+    "sanity:deploy": "sanity deploy",
+    "sanity:deploy-schema": "sanity schema deploy"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",
@@ -24,6 +27,7 @@
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.16.0",
     "sanity": "^3.70.0",
+    "styled-components": "^6.1.15",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0"
   },

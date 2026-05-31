@@ -8,7 +8,6 @@ import { ExperienceDetailPage } from '@/pages/ExperienceDetailPage'
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
-    // If navigating with a hash, let the browser or HomePage handle scrolling
     if (!hash) {
       window.scrollTo(0, 0)
     }

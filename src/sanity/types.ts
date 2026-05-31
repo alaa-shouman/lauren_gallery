@@ -55,9 +55,12 @@ export interface Experience {
   title: string
   slug: { current: string }
   studio?: string
+  role?: string
   year?: number
   location?: string
   description?: string
+  footprint?: string
+  materials?: string[]
   category: 'work' | 'freelance' | 'university'
   order?: number
   coverImage?: SanityImage

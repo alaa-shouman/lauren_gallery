@@ -31,7 +31,7 @@ export function Footer() {
               onClick={() => handleFooterLink('hero')}
               className="font-serif italic text-2xl mb-3 text-earth-cream hover:text-earth-terracotta transition-colors duration-300"
             >
-              Lauren Mercer
+              Lauren Khafaji
             </button>
             <p className="text-earth-cream/50 text-sm leading-relaxed max-w-xs">
               {settings?.footerTagline ?? 'earth · texture · form'}
@@ -71,7 +71,7 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-earth-cream/10 flex flex-col md:flex-row justify-between gap-2">
           <p className="text-xs text-earth-cream/30">
-            &copy; {new Date().getFullYear()} Lauren Mercer. All rights reserved.
+            &copy; {new Date().getFullYear()} Lauren Khafaji. All rights reserved.
           </p>
           {settings?.email && (
             <a

@@ -26,7 +26,7 @@ export function AboutStrip() {
             ) : portraitUrl ? (
               <img
                 src={portraitUrl}
-                alt={about?.portrait.alt ?? 'Lauren Mercer portrait'}
+                alt={about?.portrait.alt ?? 'Lauren Khafaji portrait'}
                 className="w-full aspect-[3/4] object-cover rounded-2xl shadow-[0_2px_20px_rgba(28,46,36,0.08)]"
               />
             ) : (
@@ -55,7 +55,7 @@ export function AboutStrip() {
               <PortableTextRenderer value={about.bio} />
             ) : (
               <p className="text-earth-forest/65 font-light leading-relaxed">
-                Lauren Mercer is a maker working at the intersection of ceramics, textiles, and surface design. Her practice draws from natural materials, slow processes, and the textures of the land.
+                Lauren Khafaji is a maker working at the intersection of ceramics, textiles, and surface design. Her practice draws from natural materials, slow processes, and the textures of the land.
               </p>
             )}
 

@@ -76,7 +76,7 @@ export function Nav() {
           onClick={() => isHome && scrollToSection('hero')}
           className="font-serif italic text-earth-forest text-xl tracking-tight hover:text-earth-terracotta transition-colors duration-300"
         >
-          Lauren Mercer
+          Lauren Khafaji
         </Link>
 
         {/* Desktop nav */}
