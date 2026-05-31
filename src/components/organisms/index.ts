@@ -1,1 +1,8 @@
-// organisms components
+export { Nav } from './Nav'
+export { Footer } from './Footer'
+export { HeroSection } from './HeroSection'
+export { FeaturedWorkGrid } from './FeaturedWorkGrid'
+export { AboutStrip } from './AboutStrip'
+export { TestimonialsSection } from './TestimonialsSection'
+export { PressStrip } from './PressStrip'
+export { ContactTeaser } from './ContactTeaser'

@@ -1,115 +1,115 @@
 @import "tailwindcss";
 
 /* ─── Design Tokens ────────────────────────────────────────────────────────── */
-/* Edit these variables to change colours, fonts, and radii site-wide.         */
-/* Tailwind utilities reference them via the @theme block below.               */
-
 :root {
-  /* Palette */
-  --terra: #d39e82;
-  --terra-d: #b67e60;
-  --sage: #9db2a1;
-  --cream: #f5f2eb;
-  --cream-d: #ebe6d8;
-  --forest: #1c2e24;
+  /* Earth & Texture palette */
+  --earth-cream:           #F5F2EB;
+  --earth-terracotta:      #D39E82;
+  --earth-terracotta-dark: #b67e60;
+  --earth-sage:            #9DB2A1;
+  --earth-forest:          #1C2E24;
+  --earth-sand:            #E8E0D0;
+  --earth-warm:            #F0EAE0;
+
+  /* Legacy aliases (keep for shadcn compat) */
+  --terra:      var(--earth-terracotta);
+  --terra-d:    var(--earth-terracotta-dark);
+  --sage:       var(--earth-sage);
+  --cream:      var(--earth-cream);
+  --cream-d:    #ebe6d8;
+  --forest:     var(--earth-forest);
   --forest-mid: #3b5345;
-  --paper-wrap: #e0d9c8;
-  --rule: #d8d1bf;
-  --mute: #6b6f60;
+  --paper-wrap: var(--earth-sand);
+  --rule:       #d8d1bf;
+  --mute:       #6b6f60;
 
   /* Fonts */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:  "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
-  --font-mono: "Space Mono", ui-monospace, "Cascadia Code", monospace;
+  --font-mono:  "Space Mono", ui-monospace, monospace;
 
   /* Radius */
   --radius: 0.5rem;
 
-  /* Brand palette — light mode */
-  --background: var(--paper-wrap);
-  --foreground: var(--forest);
-
-  --card: var(--cream);
-  --card-foreground: var(--forest);
-
-  --popover: var(--cream);
-  --popover-foreground: var(--forest);
-
-  --primary: var(--forest);
-  --primary-foreground: var(--cream);
-
-  --secondary: var(--cream-d);
-  --secondary-foreground: var(--forest);
-
-  --muted: var(--cream-d);
-  --muted-foreground: var(--mute);
-
-  --accent: var(--terra);
-  --accent-foreground: var(--forest);
-
-  --destructive: var(--terra-d);
-  --destructive-foreground: var(--cream);
-
-  --border: var(--rule);
-  --input: var(--rule);
-  --ring: var(--sage);
+  /* shadcn semantic tokens */
+  --background:           var(--earth-cream);
+  --foreground:           var(--earth-forest);
+  --card:                 var(--earth-sand);
+  --card-foreground:      var(--earth-forest);
+  --popover:              var(--earth-cream);
+  --popover-foreground:   var(--earth-forest);
+  --primary:              var(--earth-forest);
+  --primary-foreground:   var(--earth-cream);
+  --secondary:            var(--earth-warm);
+  --secondary-foreground: var(--earth-forest);
+  --muted:                var(--earth-sand);
+  --muted-foreground:     var(--mute);
+  --accent:               var(--earth-terracotta);
+  --accent-foreground:    var(--earth-forest);
+  --destructive:          var(--earth-terracotta-dark);
+  --destructive-foreground: var(--earth-cream);
+  --border:               var(--rule);
+  --input:                var(--rule);
+  --ring:                 var(--earth-sage);
 }
 
 .dark {
-  --background: var(--forest);
-  --foreground: var(--cream);
-
-  --card: var(--forest-mid);
-  --card-foreground: var(--cream);
-
-  --popover: var(--forest-mid);
-  --popover-foreground: var(--cream);
-
-  --primary: var(--cream);
-  --primary-foreground: var(--forest);
-
-  --secondary: var(--forest-mid);
-  --secondary-foreground: var(--cream);
-
-  --muted: var(--forest-mid);
-  --muted-foreground: var(--cream-d);
-
-  --accent: var(--terra);
-  --accent-foreground: var(--forest);
-
-  --destructive: var(--terra-d);
-  --destructive-foreground: var(--cream);
-
-  --border: var(--forest-mid);
-  --input: var(--forest-mid);
-  --ring: var(--sage);
+  --background:           var(--earth-forest);
+  --foreground:           var(--earth-cream);
+  --card:                 var(--forest-mid);
+  --card-foreground:      var(--earth-cream);
+  --popover:              var(--forest-mid);
+  --popover-foreground:   var(--earth-cream);
+  --primary:              var(--earth-cream);
+  --primary-foreground:   var(--earth-forest);
+  --secondary:            var(--forest-mid);
+  --secondary-foreground: var(--earth-cream);
+  --muted:                var(--forest-mid);
+  --muted-foreground:     var(--cream-d);
+  --accent:               var(--earth-terracotta);
+  --accent-foreground:    var(--earth-forest);
+  --destructive:          var(--earth-terracotta-dark);
+  --destructive-foreground: var(--earth-cream);
+  --border:               var(--forest-mid);
+  --input:                var(--forest-mid);
+  --ring:                 var(--earth-sage);
 }
 
-/* ─── Tailwind v4 theme mapping ─────────────────────────────────────────────── */
+/* ─── Tailwind v4 theme mapping ──────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  /* Earth palette */
+  --color-earth-cream:           var(--earth-cream);
+  --color-earth-terracotta:      var(--earth-terracotta);
+  --color-earth-terracotta-dark: var(--earth-terracotta-dark);
+  --color-earth-sage:            var(--earth-sage);
+  --color-earth-forest:          var(--earth-forest);
+  --color-earth-sand:            var(--earth-sand);
+  --color-earth-warm:            var(--earth-warm);
 
-  --font-sans: var(--font-sans);
+  /* shadcn semantic */
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-destructive:          var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-ring:                 var(--ring);
+
+  --font-sans:  var(--font-sans);
   --font-serif: var(--font-serif);
-  --font-mono: var(--font-mono);
+  --font-mono:  var(--font-mono);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -117,13 +117,31 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* ─── Base styles ────────────────────────────────────────────────────────────── */
+/* ─── Base styles ─────────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-earth-cream text-earth-forest font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+  }
+}
+
+/* ─── Utility: scroll fade-in ─────────────────────────────────────────────── */
+@layer utilities {
+  .fade-up {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+                transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  .fade-up.in-view {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
