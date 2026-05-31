@@ -34,7 +34,7 @@ export function SocialSection() {
   const resumeUrl = settings?.resume?.asset?.url ?? null
 
   return (
-    <section id="contact" className="py-24 md:py-32 bg-earth-warm">
+    <section id="contact" className="py-24 md:py-32 bg-earth-cream">
       <div className="mx-auto max-w-280 px-6 text-center">
         <p className="text-xs tracking-[0.22em] text-earth-sage font-medium uppercase mb-5">
           get in touch
