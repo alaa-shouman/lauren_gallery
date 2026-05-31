@@ -4,7 +4,7 @@ export const aboutQuery = groq`
   *[_type == "about"][0] {
     sectionLabel,
     bio,
-    values,
+    processSteps,
     portrait { asset->, alt },
     signatureImage { asset->, alt }
   }

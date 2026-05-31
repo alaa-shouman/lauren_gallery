@@ -5,29 +5,26 @@ import { PortableTextRenderer } from '@/components/molecules/PortableTextRendere
 import { useFadeIn } from '@/hooks/useFadeIn'
 import type { AboutData } from '@/sanity/types'
 
-const PROCESS_STEPS = [
+const FALLBACK_PROCESS_STEPS = [
   { number: '01', title: 'Gather', description: 'Every piece begins with material — clay pulled from the earth, fibres sourced directly from small producers.' },
   { number: '02', title: 'Shape', description: 'Forms emerge slowly, guided by hand and attention. No shortcuts, no rush.' },
   { number: '03', title: 'Fire', description: 'The kiln transforms raw material into something permanent. Each firing is a conversation.' },
-  { number: '04', title: 'Finish', description: 'Surface, texture, and colour are considered last — completing the object\'s character.' },
+  { number: '04', title: 'Finish', description: "Surface, texture, and colour are considered last — completing the object's character." },
 ]
 
-const MOCK_VALUES = [
-  { icon: '🌿', label: 'Natural materials', description: 'Only what the earth provides — clay, fibre, pigment.' },
-  { icon: '🤲', label: 'Slow process', description: 'Patience as a practice; no shortcuts in the studio.' },
-  { icon: '♻️', label: 'Honest making', description: 'Work that shows its process, never hiding the hand.' },
-]
 
 export function AboutSection() {
   const { data: about, loading } = useSanity<AboutData>(aboutQuery)
   const bioRef = useFadeIn<HTMLDivElement>()
   const processRef = useFadeIn<HTMLDivElement>()
+  const processSteps = (about?.processSteps && about.processSteps.length > 0)
+    ? about.processSteps
+    : FALLBACK_PROCESS_STEPS
 
   const portraitUrl = about?.portrait?.asset
     ? urlFor(about.portrait).width(800).height(1067).fit('crop').url()
     : null
 
-  const values = about?.values && about.values.length > 0 ? about.values : MOCK_VALUES
 
   return (
     <section id="about">
@@ -100,7 +97,7 @@ export function AboutSection() {
             </h3>
 
             <div className="grid md:grid-cols-2 gap-12">
-              {PROCESS_STEPS.map((step) => (
+              {processSteps.map((step) => (
                 <div key={step.number} className="relative pl-8">
                   <span className="absolute left-0 top-0 font-serif italic text-[5rem] leading-none text-earth-terracotta/15 select-none -translate-y-4">
                     {step.number}
@@ -116,27 +113,6 @@ export function AboutSection() {
         </div>
       </div>
 
-      {/* Values block */}
-      <div className="py-24 bg-earth-warm">
-        <div className="mx-auto max-w-[1120px] px-6">
-          <p className="text-xs tracking-[0.2em] text-earth-sage uppercase mb-4">what guides the work</p>
-          <h3 className="font-serif italic text-4xl text-earth-forest mb-12 tracking-[-0.02em]">
-            Values
-          </h3>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {values.map((v, i) => (
-              <div
-                key={i}
-                className="bg-earth-cream rounded-2xl p-6 shadow-[0_2px_20px_rgba(28,46,36,0.06)]"
-              >
-                <span className="block text-2xl mb-3">{v.icon}</span>
-                <h4 className="font-medium text-earth-forest mb-2">{v.label}</h4>
-                <p className="text-sm text-earth-forest/55 leading-relaxed">{v.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
     </section>
   )
 }

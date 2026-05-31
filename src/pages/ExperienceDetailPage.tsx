@@ -121,7 +121,7 @@ export function ExperienceDetailPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-earth-cream pt-16">
+      <main className="min-h-screen bg-earth-cream pt-16 md:pt-20">
         <div className="h-14 border-b border-earth-sand bg-earth-cream animate-pulse" />
         <div className="mx-auto max-w-280 px-6 py-16 grid md:grid-cols-[3fr_2fr] gap-12">
           <div className="space-y-6">
@@ -141,7 +141,7 @@ export function ExperienceDetailPage() {
 
   if (!exp) {
     return (
-      <main className="min-h-screen bg-earth-cream pt-24 flex items-center justify-center">
+      <main className="min-h-screen bg-earth-cream pt-16 md:pt-20 flex items-center justify-center">
         <div className="text-center">
           <p className="text-earth-forest/40 mb-4">Project not found.</p>
           <button onClick={goBack} className="text-sm text-earth-sage hover:text-earth-forest transition-colors">
@@ -153,10 +153,10 @@ export function ExperienceDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-earth-cream">
+    <main className="min-h-screen bg-earth-cream pt-16 md:pt-20">
 
       {/* ── Sticky secondary bar ── */}
-      <div className="sticky top-16 z-30 bg-earth-cream/95 backdrop-blur-sm border-b border-earth-sand/70">
+      <div className="sticky top-16 md:top-20 z-30 bg-earth-cream/95 backdrop-blur-sm border-b border-earth-sand/70">
         <div className="mx-auto max-w-280 px-6 h-14 flex items-center justify-between">
           <button
             onClick={goBack}

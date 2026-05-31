@@ -9,58 +9,31 @@ export const siteSettingsSchema = defineType({
       name: 'siteTitle',
       title: 'Site Title',
       type: 'string',
+      description: 'Used for the browser tab title',
     }),
     defineField({
       name: 'metaDescription',
       title: 'Meta Description',
       type: 'text',
       rows: 3,
-    }),
-    defineField({
-      name: 'socialLinks',
-      title: 'Social Links',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({ name: 'platform', type: 'string', title: 'Platform' }),
-            defineField({ name: 'url', type: 'url', title: 'URL' }),
-          ],
-          preview: {
-            select: { title: 'platform', subtitle: 'url' },
-          },
-        },
-      ],
-    }),
-    defineField({
-      name: 'email',
-      title: 'Email',
-      type: 'string',
-    }),
-    defineField({
-      name: 'contactNote',
-      title: 'Contact Note',
-      type: 'text',
-      rows: 3,
-      description: 'Shown below the contact form',
-    }),
-    defineField({
-      name: 'footerTagline',
-      title: 'Footer Tagline',
-      type: 'string',
+      description: 'SEO description shown in search results',
     }),
     defineField({
       name: 'role',
       title: 'Role / Title',
       type: 'string',
-      description: 'e.g. "Ceramicist & Textile Artist" — shown in hero label',
+      description: 'Shown in the hero label, e.g. "Ceramicist & Textile Artist"',
     }),
     defineField({
       name: 'location',
       title: 'Location',
       type: 'string',
-      description: 'e.g. "Beirut, Lebanon" — shown in hero label',
+      description: 'Shown in the hero label, e.g. "Beirut, Lebanon"',
+    }),
+    defineField({
+      name: 'email',
+      title: 'Email',
+      type: 'string',
     }),
     defineField({
       name: 'whatsapp',
@@ -78,7 +51,27 @@ export const siteSettingsSchema = defineType({
       name: 'resume',
       title: 'Resume / CV File',
       type: 'file',
-      description: 'PDF file for the download resume button',
+      description: 'PDF file for the Download Resume button',
+    }),
+    defineField({
+      name: 'footerTagline',
+      title: 'Footer Tagline',
+      type: 'string',
+    }),
+    defineField({
+      name: 'socialLinks',
+      title: 'Additional Social Links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'platform', type: 'string', title: 'Platform' }),
+            defineField({ name: 'url', type: 'url', title: 'URL' }),
+          ],
+          preview: { select: { title: 'platform', subtitle: 'url' } },
+        },
+      ],
     }),
   ],
   preview: {

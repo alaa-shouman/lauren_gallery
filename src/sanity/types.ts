@@ -22,16 +22,16 @@ export interface HeroData {
   heroImage: SanityImage
 }
 
-export interface AboutValue {
-  icon: string
-  label: string
+export interface ProcessStep {
+  number: string
+  title: string
   description: string
 }
 
 export interface AboutData {
   sectionLabel: string
   bio: unknown[]
-  values: AboutValue[]
+  processSteps?: ProcessStep[]
   portrait: SanityImage
   signatureImage?: SanityImage
 }

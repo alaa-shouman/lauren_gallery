@@ -9,7 +9,7 @@ export const aboutSchema = defineType({
       name: 'sectionLabel',
       title: 'Section Label',
       type: 'string',
-      description: 'e.g. "the maker"',
+      description: 'Small caps label above the heading, e.g. "the maker"',
     }),
     defineField({
       name: 'portrait',
@@ -29,7 +29,6 @@ export const aboutSchema = defineType({
           type: 'block',
           styles: [
             { title: 'Normal', value: 'normal' },
-            { title: 'Heading', value: 'h2' },
           ],
           marks: {
             decorators: [
@@ -44,31 +43,32 @@ export const aboutSchema = defineType({
       name: 'signatureImage',
       title: 'Signature Image',
       type: 'image',
-      description: 'Optional handwritten signature SVG/PNG',
+      description: 'Optional handwritten signature shown below the bio',
       fields: [
         defineField({ name: 'alt', type: 'string', title: 'Alt text' }),
       ],
     }),
     defineField({
-      name: 'values',
-      title: 'Values',
+      name: 'processSteps',
+      title: 'Process Steps',
       type: 'array',
+      description: 'The four steps shown in the "How a piece comes to life" section',
       of: [
         {
           type: 'object',
           fields: [
-            defineField({ name: 'icon', type: 'string', title: 'Icon (emoji or name)' }),
-            defineField({ name: 'label', type: 'string', title: 'Label' }),
-            defineField({ name: 'description', type: 'text', title: 'Description', rows: 2 }),
+            defineField({ name: 'number', type: 'string', title: 'Step Number', description: 'e.g. "01"' }),
+            defineField({ name: 'title', type: 'string', title: 'Step Title' }),
+            defineField({ name: 'description', type: 'text', title: 'Description', rows: 3 }),
           ],
           preview: {
-            select: { title: 'label', subtitle: 'description' },
+            select: { title: 'title', subtitle: 'number' },
           },
         },
       ],
     }),
   ],
   preview: {
-    select: { title: 'sectionLabel' },
+    select: { title: 'sectionLabel', media: 'portrait' },
   },
 })

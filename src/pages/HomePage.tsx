@@ -3,8 +3,6 @@ import {
   HeroSection,
   ExperienceSection,
   AboutSection,
-  TestimonialsSection,
-  PressStrip,
   SocialSection,
 } from '@/components/organisms'
 
@@ -24,8 +22,6 @@ export function HomePage() {
       <HeroSection />
       <ExperienceSection />
       <AboutSection />
-      <TestimonialsSection />
-      <PressStrip />
       <SocialSection />
     </main>
   )
