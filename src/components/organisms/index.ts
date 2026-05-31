@@ -1,10 +1,12 @@
 export { Nav } from './Nav'
 export { Footer } from './Footer'
 export { HeroSection } from './HeroSection'
+export { ExperienceSection } from './ExperienceSection'
 export { WorkSection } from './WorkSection'
 export { AboutSection } from './AboutSection'
 export { TestimonialsSection } from './TestimonialsSection'
 export { PressStrip } from './PressStrip'
+export { SocialSection } from './SocialSection'
 export { ContactSection } from './ContactSection'
 // Legacy — keep for now in case anything still references them
 export { FeaturedWorkGrid } from './FeaturedWorkGrid'

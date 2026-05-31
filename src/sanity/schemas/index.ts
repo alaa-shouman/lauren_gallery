@@ -5,6 +5,7 @@ import { collectionSchema } from './collection'
 import { testimonialSchema } from './testimonial'
 import { pressSchema } from './press'
 import { siteSettingsSchema } from './siteSettings'
+import { experienceSchema } from './experience'
 
 export const schemaTypes = [
   heroSchema,
@@ -14,4 +15,5 @@ export const schemaTypes = [
   testimonialSchema,
   pressSchema,
   siteSettingsSchema,
+  experienceSchema,
 ]

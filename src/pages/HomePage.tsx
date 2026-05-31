@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
 import {
   HeroSection,
-  WorkSection,
+  ExperienceSection,
   AboutSection,
   TestimonialsSection,
   PressStrip,
-  ContactSection,
+  SocialSection,
 } from '@/components/organisms'
 
 export function HomePage() {
-  // Honour pending scroll set by cross-page nav links
   useEffect(() => {
     const target = sessionStorage.getItem('_pendingScroll')
     if (target) {
@@ -23,11 +22,11 @@ export function HomePage() {
   return (
     <main>
       <HeroSection />
-      <WorkSection />
+      <ExperienceSection />
       <AboutSection />
       <TestimonialsSection />
       <PressStrip />
-      <ContactSection />
+      <SocialSection />
     </main>
   )
 }

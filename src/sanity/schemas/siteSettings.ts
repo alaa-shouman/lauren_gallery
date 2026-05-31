@@ -50,6 +50,36 @@ export const siteSettingsSchema = defineType({
       title: 'Footer Tagline',
       type: 'string',
     }),
+    defineField({
+      name: 'role',
+      title: 'Role / Title',
+      type: 'string',
+      description: 'e.g. "Ceramicist & Textile Artist" — shown in hero label',
+    }),
+    defineField({
+      name: 'location',
+      title: 'Location',
+      type: 'string',
+      description: 'e.g. "Beirut, Lebanon" — shown in hero label',
+    }),
+    defineField({
+      name: 'whatsapp',
+      title: 'WhatsApp Number',
+      type: 'string',
+      description: 'Include country code, no spaces, e.g. "+9613123456"',
+    }),
+    defineField({
+      name: 'instagram',
+      title: 'Instagram Handle',
+      type: 'string',
+      description: 'Without @, e.g. "laurenkhafaji"',
+    }),
+    defineField({
+      name: 'resume',
+      title: 'Resume / CV File',
+      type: 'file',
+      description: 'PDF file for the download resume button',
+    }),
   ],
   preview: {
     select: { title: 'siteTitle' },

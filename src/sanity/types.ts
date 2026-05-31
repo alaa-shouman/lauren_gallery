@@ -12,7 +12,10 @@ export interface SanityImage {
 export interface HeroData {
   tagline: string
   headline: string
+  headlineItalic?: string
+  headlineSuffix?: string
   subheadline: string
+  tags?: string[]
   ctaLabel: string
   ctaHref: string
   backgroundTone: 'cream' | 'warm' | 'forest'
@@ -47,6 +50,21 @@ export interface Project {
   featured?: boolean
 }
 
+export interface Experience {
+  _id: string
+  title: string
+  slug: { current: string }
+  studio?: string
+  year?: number
+  location?: string
+  description?: string
+  category: 'work' | 'freelance' | 'university'
+  order?: number
+  coverImage?: SanityImage
+  gallery?: SanityImage[]
+  externalUrl?: string
+}
+
 export interface Testimonial {
   _id: string
   quote: string
@@ -77,4 +95,9 @@ export interface SiteSettings {
   email: string
   contactNote: string
   footerTagline: string
+  role?: string
+  location?: string
+  whatsapp?: string
+  instagram?: string
+  resume?: { asset: { url: string } }
 }

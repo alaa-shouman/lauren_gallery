@@ -7,6 +7,11 @@ export const siteSettingsQuery = groq`
     socialLinks,
     email,
     contactNote,
-    footerTagline
+    footerTagline,
+    role,
+    location,
+    whatsapp,
+    instagram,
+    resume { asset-> }
   }
 `
