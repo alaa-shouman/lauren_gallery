@@ -29,7 +29,7 @@ export function AboutSection() {
   return (
     <section id="about">
       {/* Bio block */}
-      <div className="py-24 md:py-32 bg-earth-warm">
+      <div className="py-24 md:py-32 bg-cream">
         <div className="mx-auto max-w-[1120px] px-6">
           <div ref={bioRef} className="fade-up grid md:grid-cols-2 gap-16 items-start">
             {/* Portrait */}
@@ -88,7 +88,7 @@ export function AboutSection() {
       </div>
 
       {/* Process block */}
-      <div className="py-24 bg-earth-cream">
+      <div className="py-24 bg-cream">
         <div className="mx-auto max-w-[1120px] px-6">
           <div ref={processRef} className="fade-up">
             <p className="text-xs tracking-[0.2em] text-earth-sage uppercase mb-4">the process</p>
@@ -99,7 +99,7 @@ export function AboutSection() {
             <div className="grid md:grid-cols-2 gap-12">
               {processSteps.map((step) => (
                 <div key={step.number} className="relative pl-8">
-                  <span className="absolute left-0 top-0 font-serif italic text-[5rem] leading-none text-earth-terracotta/15 select-none -translate-y-4">
+                  <span className="absolute left-0 top-0 font-serif italic text-[5rem] leading-none text-earth-forest/10 select-none -translate-y-4">
                     {step.number}
                   </span>
                   <div className="relative z-10 pt-8">

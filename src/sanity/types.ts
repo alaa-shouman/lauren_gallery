@@ -47,6 +47,7 @@ export interface Experience {
   coverImage?: SanityImage
   gallery?: SanityImage[]
   externalUrl?: string
+  projectPdf?: { asset: { url: string } }
 }
 
 export interface SocialLink {

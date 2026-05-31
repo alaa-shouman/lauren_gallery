@@ -32,6 +32,7 @@ export const experienceBySlugQuery = groq`
     category,
     externalUrl,
     coverImage { asset->, alt },
-    gallery[] { asset->, alt }
+    gallery[] { asset->, alt },
+    projectPdf { asset-> }
   }
 `

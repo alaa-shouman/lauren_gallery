@@ -9,14 +9,14 @@
   --earth-sage:            #9a8f7e;
   --earth-forest:          #1a1a1a;
   --earth-sand:            #ede8de;
-  --earth-warm:            #f3ede4;
+  --earth-warm:            #D3D3D3;
 
   /* Legacy aliases (keep for shadcn compat) */
   --terra:      var(--earth-terracotta);
   --terra-d:    var(--earth-terracotta-dark);
   --sage:       var(--earth-sage);
-  --cream:      var(--earth-cream);
-  --cream-d:    #e8e3d8;
+  --cream:      #D3D3D3;
+  --cream-d:    #c4c4c4;
   --forest:     var(--earth-forest);
   --forest-mid: #3a3730;
   --paper-wrap: var(--earth-sand);

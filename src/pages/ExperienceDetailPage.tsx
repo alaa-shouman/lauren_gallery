@@ -162,13 +162,31 @@ export function ExperienceDetailPage() {
           >
             ← Back to projects
           </button>
-          <div className="text-right">
-            <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium leading-none mb-1">
-              {categoryLabel}
-            </p>
-            <p className="text-[10px] tracking-[0.12em] text-earth-forest/40 uppercase leading-none">
-              {[exp.studio, exp.year].filter(Boolean).join(' · ')}
-            </p>
+
+          <div className="flex items-center gap-3">
+            {exp?.projectPdf?.asset?.url && (
+              <a
+                href={exp.projectPdf.asset.url}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                Download PDF
+              </a>
+            )}
+            <div className="text-right">
+              <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium leading-none mb-1">
+                {categoryLabel}
+              </p>
+              <p className="text-[10px] tracking-[0.12em] text-earth-forest/40 uppercase leading-none">
+                {[exp.studio, exp.year].filter(Boolean).join(' · ')}
+              </p>
+            </div>
           </div>
         </div>
       </div>

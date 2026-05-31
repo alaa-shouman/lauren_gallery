@@ -110,6 +110,13 @@ export const experienceSchema = defineType({
       type: 'url',
       description: 'Optional link to external project page',
     }),
+    defineField({
+      name: 'projectPdf',
+      title: 'Project PDF',
+      type: 'file',
+      description: 'Upload a PDF for this project (e.g. presentation or case study)',
+      options: { accept: '.pdf' },
+    }),
   ],
   orderings: [
     {
