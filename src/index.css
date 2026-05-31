@@ -5,72 +5,84 @@
 /* Tailwind utilities reference them via the @theme block below.               */
 
 :root {
+  /* Palette */
+  --terra: #d39e82;
+  --terra-d: #b67e60;
+  --sage: #9db2a1;
+  --cream: #f5f2eb;
+  --cream-d: #ebe6d8;
+  --forest: #1c2e24;
+  --forest-mid: #3b5345;
+  --paper-wrap: #e0d9c8;
+  --rule: #d8d1bf;
+  --mute: #6b6f60;
+
   /* Fonts */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
-  --font-mono: ui-monospace, "Cascadia Code", monospace;
+  --font-mono: "Space Mono", ui-monospace, "Cascadia Code", monospace;
 
   /* Radius */
   --radius: 0.5rem;
 
   /* Brand palette — light mode */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: var(--paper-wrap);
+  --foreground: var(--forest);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card: var(--cream);
+  --card-foreground: var(--forest);
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover: var(--cream);
+  --popover-foreground: var(--forest);
 
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: var(--forest);
+  --primary-foreground: var(--cream);
 
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary: var(--cream-d);
+  --secondary-foreground: var(--forest);
 
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted: var(--cream-d);
+  --muted-foreground: var(--mute);
 
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: var(--terra);
+  --accent-foreground: var(--forest);
 
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
+  --destructive: var(--terra-d);
+  --destructive-foreground: var(--cream);
 
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--sage);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: var(--forest);
+  --foreground: var(--cream);
 
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
+  --card: var(--forest-mid);
+  --card-foreground: var(--cream);
 
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --popover: var(--forest-mid);
+  --popover-foreground: var(--cream);
 
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: var(--cream);
+  --primary-foreground: var(--forest);
 
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --secondary: var(--forest-mid);
+  --secondary-foreground: var(--cream);
 
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted: var(--forest-mid);
+  --muted-foreground: var(--cream-d);
 
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: var(--terra);
+  --accent-foreground: var(--forest);
 
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --destructive: var(--terra-d);
+  --destructive-foreground: var(--cream);
 
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --border: var(--forest-mid);
+  --input: var(--forest-mid);
+  --ring: var(--sage);
 }
 
 /* ─── Tailwind v4 theme mapping ─────────────────────────────────────────────── */
