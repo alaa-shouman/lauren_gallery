@@ -4,7 +4,7 @@ import { useSanity } from '@/hooks/useSanity'
 import { experienceBySlugQuery } from '@/sanity/queries/experience'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
-import type { Experience, SanityImage } from '@/sanity/types'
+import type { Experience } from '@/sanity/types'
 
 const CATEGORY_LABEL: Record<string, string> = {
   work: 'Work Experience',
@@ -96,7 +96,7 @@ export function ExperienceDetailPage() {
   // Build gallery image list — use Sanity assets when available, picsum as fallback
   const galleryImages: { src: string; alt: string }[] = (() => {
     if (!slug) return []
-    const sanityImages: SanityImage[] = exp?.gallery ?? []
+    const sanityImages = exp?.gallery ?? []
     const seeds = PICSUM_SEEDS[slug] ?? []
     const count = Math.max(sanityImages.length, seeds.length, 6)
     return Array.from({ length: count }).map((_, i) => {
@@ -107,8 +107,6 @@ export function ExperienceDetailPage() {
       }
     })
   })()
-
-  const allLightboxImages: SanityImage[] = exp?.gallery ?? []
 
   const closeLightbox = () => setLightboxIndex(null)
   const prevImage = () =>
@@ -267,38 +265,14 @@ export function ExperienceDetailPage() {
         </div>
       )}
 
-      {/* Lightbox — uses Sanity images when available, falls back to same picsum */}
       {lightboxIndex !== null && galleryImages.length > 0 && (
-        allLightboxImages.length > 0 ? (
-          <Lightbox
-            images={allLightboxImages}
-            index={lightboxIndex}
-            onClose={closeLightbox}
-            onPrev={prevImage}
-            onNext={nextImage}
-          />
-        ) : (
-          <div
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
-            onClick={closeLightbox}
-          >
-            <button
-              onClick={closeLightbox}
-              className="absolute top-6 right-6 text-white/60 hover:text-white text-2xl"
-              aria-label="Close"
-            >
-              ✕
-            </button>
-            <button onClick={prevImage} className="absolute left-6 text-white/60 hover:text-white text-3xl px-4">‹</button>
-            <img
-              src={galleryImages[lightboxIndex]?.src}
-              alt={galleryImages[lightboxIndex]?.alt}
-              className="max-h-[90vh] max-w-[90vw] object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <button onClick={nextImage} className="absolute right-6 text-white/60 hover:text-white text-3xl px-4">›</button>
-          </div>
-        )
+        <Lightbox
+          images={galleryImages}
+          index={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={prevImage}
+          onNext={nextImage}
+        />
       )}
     </main>
   )

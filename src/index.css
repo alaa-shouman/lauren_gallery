@@ -2,26 +2,26 @@
 
 /* ─── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
-  /* Earth & Texture palette */
-  --earth-cream:           #F5F2EB;
-  --earth-terracotta:      #D39E82;
-  --earth-terracotta-dark: #b67e60;
-  --earth-sage:            #9DB2A1;
-  --earth-forest:          #1C2E24;
-  --earth-sand:            #E8E0D0;
-  --earth-warm:            #F0EAE0;
+  /* Core palette */
+  --earth-cream:           #f9f9f8;
+  --earth-terracotta:      #a38a5e;
+  --earth-terracotta-dark: #7d6a46;
+  --earth-sage:            #9a8f7e;
+  --earth-forest:          #1a1a1a;
+  --earth-sand:            #ede8de;
+  --earth-warm:            #f3ede4;
 
   /* Legacy aliases (keep for shadcn compat) */
   --terra:      var(--earth-terracotta);
   --terra-d:    var(--earth-terracotta-dark);
   --sage:       var(--earth-sage);
   --cream:      var(--earth-cream);
-  --cream-d:    #ebe6d8;
+  --cream-d:    #e8e3d8;
   --forest:     var(--earth-forest);
-  --forest-mid: #3b5345;
+  --forest-mid: #3a3730;
   --paper-wrap: var(--earth-sand);
-  --rule:       #d8d1bf;
-  --mute:       #6b6f60;
+  --rule:       #ddd8ce;
+  --mute:       #7a7268;
 
   /* Fonts */
   --font-sans:  "DM Sans", ui-sans-serif, system-ui, sans-serif;
