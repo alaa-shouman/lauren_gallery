@@ -3,8 +3,9 @@ import { structureTool } from "sanity/structure";
 import type { StructureBuilder } from "sanity/structure";
 import { schemaTypes } from "./src/sanity/schemas";
 
-const projectId = process.env.SANITY_PROJECT_ID ?? import.meta.env?.VITE_SANITY_PROJECT_ID ?? '';
-const dataset = process.env.SANITY_DATASET ?? import.meta.env?.VITE_SANITY_DATASET ?? '';
+const viteEnv = (import.meta as unknown as { env: Record<string, string | undefined> }).env ?? {}
+const projectId = process.env.SANITY_PROJECT_ID ?? viteEnv.VITE_SANITY_PROJECT_ID ?? '';
+const dataset = process.env.SANITY_DATASET ?? viteEnv.VITE_SANITY_DATASET ?? '';
 
 const structure = (S: StructureBuilder) =>
   S.list()
