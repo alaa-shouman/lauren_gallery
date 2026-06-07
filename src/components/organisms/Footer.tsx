@@ -24,7 +24,7 @@ export function Footer() {
 
   return (
     <footer className="bg-earth-forest text-earth-cream">
-      <div className="mx-auto max-w-[1120px] px-6 py-16">
+      <div className="mx-auto max-w-280 px-6 py-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div>
             <button

@@ -27,15 +27,15 @@ export function Nav() {
   }, [])
 
   useEffect(() => {
-    setMenuOpen(false)
-  }, [location.pathname])
+    // Defer closing the mobile menu to avoid synchronous setState inside the effect.
+    if (!menuOpen) return
+    const t = window.setTimeout(() => setMenuOpen(false), 0)
+    return () => clearTimeout(t)
+  }, [location.pathname, menuOpen])
 
   // Track active section via IntersectionObserver when on home page
   useEffect(() => {
-    if (!isHome) {
-      setActiveSection('')
-      return
-    }
+    if (!isHome) return
     const sectionIds = ['hero', 'designs', 'about', 'testimonials', 'press', 'contact']
     const observers: IntersectionObserver[] = []
 
@@ -52,6 +52,15 @@ export function Nav() {
 
     return () => observers.forEach((obs) => obs.disconnect())
   }, [isHome])
+
+  // Clear active section when navigating away from the home page, but only
+  // if we currently have one to avoid redundant state updates.
+  useEffect(() => {
+    // Defer clearing the active section to avoid synchronous setState inside the effect.
+    if (isHome || activeSection === '') return
+    const t = window.setTimeout(() => setActiveSection(''), 0)
+    return () => clearTimeout(t)
+  }, [isHome, activeSection])
 
   function handleNavClick(sectionId: string) {
     setMenuOpen(false)
@@ -70,7 +79,7 @@ export function Nav() {
         scrolled ? 'bg-earth-cream/95 backdrop-blur-sm shadow-[0_1px_0_rgba(28,46,36,0.08)]' : 'bg-transparent'
       )}
     >
-      <nav className="mx-auto max-w-[1120px] px-6 flex items-center justify-between h-16 md:h-20">
+      <nav className="mx-auto max-w-280 px-6 flex items-center justify-between h-16 md:h-20">
         <Link
           to="/"
           onClick={() => isHome && scrollToSection('hero')}
@@ -104,9 +113,9 @@ export function Nav() {
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           className="md:hidden flex flex-col gap-1.5 p-2"
         >
-          <span className={cn('block h-px w-6 bg-earth-forest transition-all duration-300', menuOpen && 'rotate-45 translate-y-[7px]')} />
+          <span className={cn('block h-px w-6 bg-earth-forest transition-all duration-300', menuOpen && 'rotate-45 translate-y-1.75')} />
           <span className={cn('block h-px w-6 bg-earth-forest transition-all duration-300', menuOpen && 'opacity-0')} />
-          <span className={cn('block h-px w-6 bg-earth-forest transition-all duration-300', menuOpen && '-rotate-45 -translate-y-[7px]')} />
+          <span className={cn('block h-px w-6 bg-earth-forest transition-all duration-300', menuOpen && '-rotate-45 -translate-y-1.75')} />
         </button>
       </nav>
 

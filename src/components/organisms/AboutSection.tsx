@@ -30,21 +30,21 @@ export function AboutSection() {
     <section id="about">
       {/* Bio block */}
       <div className="py-24 md:py-32 bg-cream">
-        <div className="mx-auto max-w-[1120px] px-6">
+        <div className="mx-auto max-w-280 px-6">
           <div ref={bioRef} className="fade-up grid md:grid-cols-2 gap-16 items-start">
             {/* Portrait */}
             <div>
               {loading ? (
-                <div className="aspect-[3/4] rounded-2xl bg-earth-sand animate-pulse" />
+                <div className="aspect-3/4 rounded-2xl bg-earth-sand animate-pulse" />
               ) : portraitUrl ? (
                 <img
                   src={portraitUrl}
                   alt={about?.portrait.alt ?? 'Lauren Khafaji'}
-                  className="w-full aspect-[3/4] object-cover rounded-2xl shadow-[0_2px_20px_rgba(28,46,36,0.08)]"
+                  className="w-full aspect-3/4 object-cover rounded-2xl shadow-[0_2px_20px_rgba(28,46,36,0.08)]"
                   loading="lazy"
                 />
               ) : (
-                <div className="aspect-[3/4] rounded-2xl bg-earth-sand flex items-center justify-center">
+                <div className="aspect-3/4 rounded-2xl bg-earth-sand flex items-center justify-center">
                   <div className="w-16 h-16 rounded-full border-2 border-earth-forest/10" />
                 </div>
               )}
@@ -89,7 +89,7 @@ export function AboutSection() {
 
       {/* Process block */}
       <div className="py-24 bg-cream">
-        <div className="mx-auto max-w-[1120px] px-6">
+        <div className="mx-auto max-w-280 px-6">
           <div ref={processRef} className="fade-up">
             <p className="text-xs tracking-[0.2em] text-earth-sage uppercase mb-4">the process</p>
             <h3 className="font-serif italic text-4xl md:text-5xl text-earth-forest tracking-[-0.02em] leading-[1.15] mb-16">
