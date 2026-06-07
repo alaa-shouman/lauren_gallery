@@ -1,7 +1,7 @@
 import groq from 'groq'
 
 export const allExperiencesQuery = groq`
-  *[_type == "experience"] | order(category asc, order asc) {
+  *[_type == "experience"] | order(category->order asc, order asc) {
     _id,
     title,
     slug,
@@ -9,7 +9,13 @@ export const allExperiencesQuery = groq`
     year,
     location,
     description,
-    category,
+    "category": category-> {
+      _id,
+      label,
+      accentLabel,
+      "slug": slug.current,
+      order
+    },
     order,
     externalUrl,
     coverImage { asset->, alt },
@@ -29,7 +35,13 @@ export const experienceBySlugQuery = groq`
     description,
     footprint,
     materials,
-    category,
+    "category": category-> {
+      _id,
+      label,
+      accentLabel,
+      "slug": slug.current,
+      order
+    },
     externalUrl,
     coverImage { asset->, alt },
     gallery[] { asset->, alt },

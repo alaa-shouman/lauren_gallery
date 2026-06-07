@@ -31,6 +31,14 @@ export interface AboutData {
   signatureImage?: SanityImage
 }
 
+export interface ExperienceCategory {
+  _id: string
+  label: string
+  accentLabel: string
+  slug: string
+  order: number
+}
+
 export interface Experience {
   _id: string
   title: string
@@ -42,7 +50,7 @@ export interface Experience {
   description?: string
   footprint?: string
   materials?: string[]
-  category: 'work' | 'freelance' | 'university'
+  category: ExperienceCategory
   order?: number
   coverImage?: SanityImage
   gallery?: SanityImage[]

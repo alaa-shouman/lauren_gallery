@@ -2,26 +2,12 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { allExperiencesQuery } from '@/sanity/queries/experience'
+import { allCategoriesQuery } from '@/sanity/queries/experienceCategory'
 import { urlFor } from '@/sanity/lib/image'
 import { cn } from '@/lib/utils'
-import type { Experience } from '@/sanity/types'
+import type { Experience, ExperienceCategory } from '@/sanity/types'
 
-const PICSUM_SEEDS: Record<string, string> = {
-  'notting-hill-townhouse': '237',
-  'tribeca-loft-conversion': '292',
-  'hampstead-family-home': '669',
-  'boutique-hotel-suite': '573',
-  'pied-a-terre-cannes': '617',
-  'cotswold-retreat': '399',
-  'vessel-and-void': '835',
-  'surface-studies-florence': '167',
-  'natural-pigments-research': '432',
-}
-
-function getPicsumUrl(slug: string, index: number): string {
-  const seed = PICSUM_SEEDS[slug] ?? String(index * 73 + 42)
-  return `https://picsum.photos/seed/${seed}/300/300`
-}
+// ─── ExperienceTab ─────────────────────────────────────────────────────────────
 
 interface ExperienceTabProps {
   exp: Experience & { galleryCount?: number }
@@ -32,7 +18,7 @@ interface ExperienceTabProps {
 function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
   const imageUrl = exp.coverImage?.asset
     ? urlFor(exp.coverImage).width(300).height(300).fit('crop').url()
-    : getPicsumUrl(exp.slug.current, index)
+    : `https://picsum.photos/seed/${index * 73 + 42}/300/300`
 
   const count = exp.galleryCount ?? 0
   const imageLabel = count > 0 ? String(count).padStart(2, '0') + ' images' : null
@@ -89,43 +75,27 @@ function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
   )
 }
 
-const CATEGORY_META: Record<string, { label: string; accentLabel: string; index: string }> = {
-  work: { label: 'Work', accentLabel: 'experience', index: '01' },
-  freelance: { label: 'Freelance', accentLabel: 'commissions', index: '02' },
-  university: { label: 'University', accentLabel: 'projects', index: '03' },
-}
-
-const MOCK_EXPERIENCES: (Experience & { galleryCount: number })[] = [
-  { _id: 'w1', title: 'Notting Hill Townhouse', slug: { current: 'notting-hill-townhouse' }, studio: 'Studio Heritage', year: 2024, location: 'London, UK', description: 'A complete refurbishment of a four-storey Victorian townhouse.', category: 'work', order: 1, galleryCount: 6 },
-  { _id: 'w2', title: 'Tribeca Loft Conversion', slug: { current: 'tribeca-loft-conversion' }, studio: 'Atelier Caldwell', year: 2023, location: 'New York, US', description: 'A two-floor loft for a film editor, carved out of a former printing house.', category: 'work', order: 2, galleryCount: 5 },
-  { _id: 'w3', title: 'Hampstead Family Home', slug: { current: 'hampstead-family-home' }, studio: 'Norden & Co.', year: 2022, location: 'London, UK', description: 'A 1930s Arts & Crafts house, gently modernised for a family of five.', category: 'work', order: 3, galleryCount: 4 },
-  { _id: 'f1', title: 'Boutique Hotel Suite', slug: { current: 'boutique-hotel-suite' }, studio: 'Maison Verte · Soho', year: 2025, location: 'London, UK', description: 'A signature suite for an eight-room boutique hotel.', category: 'freelance', order: 1, galleryCount: 5 },
-  { _id: 'f2', title: 'Pied-à-Terre', slug: { current: 'pied-a-terre-cannes' }, studio: 'Côte Apartment · Cannes', year: 2024, location: 'Cannes, FR', description: 'A two-bedroom apartment overlooking the Croisette.', category: 'freelance', order: 2, galleryCount: 6 },
-  { _id: 'f3', title: 'Cotswold Retreat', slug: { current: 'cotswold-retreat' }, studio: 'Birch House · Private', year: 2023, location: 'Cotswolds, UK', description: 'A weekend cottage for a couple who wanted to bring outside in.', category: 'freelance', order: 3, galleryCount: 4 },
-  { _id: 'u1', title: 'Vessel & Void', slug: { current: 'vessel-and-void' }, studio: 'AUB Final Project', year: 2021, location: 'Beirut, LB', description: 'Final-year thesis exploring negative space in ceramic form.', category: 'university', order: 1, galleryCount: 8 },
-  { _id: 'u2', title: 'Surface Studies', slug: { current: 'surface-studies-florence' }, studio: 'Exchange Studio', year: 2020, location: 'Florence, IT', description: 'Semester residency — surface texture and natural pigments.', category: 'university', order: 2, galleryCount: 5 },
-  { _id: 'u3', title: 'Natural Pigments Research', slug: { current: 'natural-pigments-research' }, studio: 'Research Grant', year: 2019, location: 'Beirut, LB', description: 'Archival study of plant-based dye traditions in the Levant.', category: 'university', order: 3, galleryCount: 3 },
-]
-
-const CATEGORY_ORDER = ['work', 'freelance', 'university'] as const
+// ─── CategoryAccordion ─────────────────────────────────────────────────────────
 
 interface CategoryAccordionProps {
-  cat: string
+  cat: ExperienceCategory
+  index: number
   items: (Experience & { galleryCount?: number })[]
   isOpen: boolean
   onToggle: () => void
   onSelectExp: (exp: Experience) => void
 }
 
-function CategoryAccordion({ cat, items, isOpen, onToggle, onSelectExp }: CategoryAccordionProps) {
-  const meta = CATEGORY_META[cat]
+function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }: CategoryAccordionProps) {
+  const displayIndex = String(index + 1).padStart(2, '0')
+
   const dateRange = items.length > 0
     ? `${Math.min(...items.map(e => e.year ?? 9999))} — ${Math.max(...items.map(e => e.year ?? 0))}`
     : null
 
   return (
     <div className="border border-earth-sand rounded-2xl overflow-hidden">
-      {/* Accordion header — click to toggle */}
+      {/* Accordion header */}
       <button
         onClick={onToggle}
         className={cn(
@@ -139,22 +109,11 @@ function CategoryAccordion({ cat, items, isOpen, onToggle, onSelectExp }: Catego
             'inline-flex shrink-0 items-center whitespace-nowrap text-xs font-mono tracking-widest transition-colors duration-200',
             isOpen ? 'text-earth-cream/40' : 'text-earth-sage'
           )}>
-            — {meta.index}
+            — {displayIndex}
           </span>
           <h3 className="min-w-0 font-serif text-2xl md:text-3xl leading-none">
-            {cat === 'freelance' ? (
-              <>
-                <span className={cn('italic transition-colors duration-200', isOpen ? 'text-earth-terracotta' : 'text-earth-terracotta')}>
-                  {meta.label}{' '}
-                </span>
-                <span>{meta.accentLabel}</span>
-              </>
-            ) : (
-              <>
-                <span>{meta.label} </span>
-                <span className="italic text-earth-terracotta">{meta.accentLabel}</span>
-              </>
-            )}
+            <span>{cat.label} </span>
+            <span className="italic text-earth-terracotta">{cat.accentLabel}</span>
           </h3>
         </div>
 
@@ -204,35 +163,39 @@ function CategoryAccordion({ cat, items, isOpen, onToggle, onSelectExp }: Catego
   )
 }
 
-export function ExperienceSection() {
-  const { data: fetched, loading } = useSanity<(Experience & { galleryCount: number })[]>(allExperiencesQuery)
-  const experiences = (fetched && fetched.length > 0) ? fetched : (!loading ? MOCK_EXPERIENCES : null)
-  const navigate = useNavigate()
+// ─── ExperienceSection ─────────────────────────────────────────────────────────
 
-  // Track which categories are open — all closed by default
+export function ExperienceSection() {
+  const { data: fetchedExperiences, loading: loadingExp } = useSanity<(Experience & { galleryCount: number })[]>(allExperiencesQuery)
+  const { data: fetchedCategories, loading: loadingCat } = useSanity<ExperienceCategory[]>(allCategoriesQuery)
+
+  const loading = loadingExp || loadingCat
+
+  const categories = fetchedCategories ?? []
+
+  const navigate = useNavigate()
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
 
-  function toggleCategory(cat: string) {
+  function toggleCategory(id: string) {
     setOpenCategories((prev) => {
       const next = new Set(prev)
-      if (next.has(cat)) {
-        next.delete(cat)
-      } else {
-        next.add(cat)
-      }
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
       return next
     })
   }
 
+  // Group experiences by category _id
   const grouped = useMemo(() => {
-    if (!experiences) return {}
-    const g: Record<string, typeof experiences> = {}
-    for (const exp of experiences) {
-      if (!g[exp.category]) g[exp.category] = []
-      g[exp.category].push(exp)
+    const list = fetchedExperiences ?? []
+    const g: Record<string, typeof list> = {}
+    for (const exp of list) {
+      if (!exp.category?._id) continue
+      if (!g[exp.category._id]) g[exp.category._id] = []
+      g[exp.category._id].push(exp)
     }
     return g
-  }, [experiences])
+  }, [fetchedExperiences])
 
   function handleSelectExp(exp: Experience) {
     navigate(`/experience/${exp.slug.current}`)
@@ -263,16 +226,16 @@ export function ExperienceSection() {
           </div>
         ) : (
           <div className="space-y-4">
-            {CATEGORY_ORDER.map((cat) => {
-              const items = grouped[cat]
-              if (!items || items.length === 0) return null
+            {(categories ?? []).map((cat, i) => {
+              const items = grouped[cat._id] ?? []
               return (
                 <CategoryAccordion
-                  key={cat}
+                  key={cat._id}
                   cat={cat}
+                  index={i}
                   items={items}
-                  isOpen={openCategories.has(cat)}
-                  onToggle={() => toggleCategory(cat)}
+                  isOpen={openCategories.has(cat._id)}
+                  onToggle={() => toggleCategory(cat._id)}
                   onSelectExp={handleSelectExp}
                 />
               )

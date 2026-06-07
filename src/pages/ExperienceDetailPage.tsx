@@ -6,11 +6,6 @@ import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
 import type { Experience } from '@/sanity/types'
 
-const CATEGORY_LABEL: Record<string, string> = {
-  work: 'Work Experience',
-  freelance: 'Freelance',
-  university: 'University',
-}
 
 const PICSUM_SEEDS: Record<string, number[]> = {
   'notting-hill-townhouse': [237, 338, 447, 554, 661, 772],
@@ -125,7 +120,9 @@ export function ExperienceDetailPage() {
     setLightboxIndex((i) => (i !== null ? (i + 1) % galleryImages.length : null))
 
   const [titleMain, titleAccent] = splitTitle(exp?.title ?? '')
-  const categoryLabel = CATEGORY_LABEL[exp?.category ?? ''] ?? exp?.category ?? ''
+  const categoryLabel = exp?.category
+    ? `${exp.category.label} ${exp.category.accentLabel}`.trim()
+    : ''
   const hasSanityPdf = Boolean(exp?.projectPdf?.asset?.url)
 
   if (loading) {

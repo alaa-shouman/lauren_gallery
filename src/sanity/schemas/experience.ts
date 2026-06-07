@@ -44,15 +44,8 @@ export const experienceSchema = defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Work Experience', value: 'work' },
-          { title: 'Freelance', value: 'freelance' },
-          { title: 'University', value: 'university' },
-        ],
-        layout: 'radio',
-      },
+      type: 'reference',
+      to: [{ type: 'experienceCategory' }],
       validation: (r) => r.required(),
     }),
     defineField({
@@ -122,10 +115,10 @@ export const experienceSchema = defineType({
     {
       title: 'Category, then Order',
       name: 'categoryOrder',
-      by: [{ field: 'category', direction: 'asc' }, { field: 'order', direction: 'asc' }],
+      by: [{ field: 'category.order', direction: 'asc' }, { field: 'order', direction: 'asc' }],
     },
   ],
   preview: {
-    select: { title: 'title', subtitle: 'category', media: 'coverImage' },
+    select: { title: 'title', subtitle: 'category.label', media: 'coverImage' },
   },
 })
