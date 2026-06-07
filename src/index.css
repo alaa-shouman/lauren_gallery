@@ -149,3 +149,269 @@
     transform: translateY(0);
   }
 }
+
+/* ─── Screen / print visibility helpers (no Tailwind print: variant) ─────── */
+.screen-only { display: block; }
+.print-only  { display: none;  }
+
+/* ─── Print styles ────────────────────────────────────────────────────────── */
+@media print {
+
+  /* Page setup — narrow margins */
+  @page {
+    size: A4 portrait;
+    margin: 0.8cm 1cm;
+  }
+
+  /* Preserve colours and backgrounds */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* ── Toggle screen vs print ── */
+  .screen-only {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+
+  /* ── Nav: release fixed, print once at top ── */
+  header {
+    position: static !important;
+    backdrop-filter: none !important;
+    background: #f9f9f8 !important;
+    border-bottom: 0.5pt solid #d3d3d3 !important;
+    padding: 0.3cm 1cm !important;
+    margin-bottom: 0.4cm !important;
+  }
+
+  /* Hide hamburger button */
+  header nav > button {
+    display: none !important;
+  }
+
+  /* Show desktop nav links in print */
+  header nav > ul {
+    display: flex !important;
+  }
+
+  /* ── Main ── */
+  main {
+    padding-top: 0 !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+  }
+
+  /* ── Animations ── */
+  .fade-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 0.8cm !important;
+    break-inside: avoid !important;
+  }
+
+  a { text-decoration: none !important; }
+
+  /* ════════════════════════════════════
+     PRINT LAYOUT — fully hardcoded CSS
+     ════════════════════════════════════ */
+
+  .print-layout {
+    display: block !important;
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    color: #1a1a1a;
+    background: #ffffff;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* ── Project header ── */
+  .print-header {
+    border-bottom: 1pt solid #1a1a1a;
+    padding-bottom: 0.5cm;
+    margin-bottom: 0.55cm;
+  }
+
+  .print-eyebrow {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 6.5pt;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    opacity: 0.4;
+    margin: 0 0 0.25cm 0;
+    display: block;
+  }
+
+  .print-title {
+    font-family: "Playfair Display", ui-serif, Georgia, serif;
+    font-size: 28pt;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: #1a1a1a;
+    margin: 0 0 0.15cm 0;
+  }
+
+  .print-title em {
+    font-style: italic;
+  }
+
+  .print-subtitle {
+    font-family: "Playfair Display", ui-serif, Georgia, serif;
+    font-style: italic;
+    font-size: 10pt;
+    color: #1a1a1a;
+    opacity: 0.5;
+    margin: 0;
+  }
+
+  /* ── Body: description (left) + meta (right) ── */
+  .print-body {
+    display: grid;
+    grid-template-columns: 1.9fr 1fr;
+    gap: 0.9cm;
+    margin-bottom: 0.6cm;
+    padding-bottom: 0.6cm;
+    border-bottom: 0.5pt solid #d3d3d3;
+    align-items: start;
+  }
+
+  .print-description {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 9.5pt;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .print-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25cm;
+  }
+
+  .print-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05cm;
+  }
+
+  .print-meta-label {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 6pt;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    opacity: 0.38;
+    display: block;
+  }
+
+  .print-meta-value {
+    font-family: "Playfair Display", ui-serif, Georgia, serif;
+    font-style: italic;
+    font-size: 12pt;
+    color: #1a1a1a;
+    line-height: 1.2;
+    display: block;
+  }
+
+  /* ── Gallery ── */
+  .print-gallery-section {
+    break-before: auto;
+  }
+
+  .print-gallery-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.4cm;
+    padding-bottom: 0.25cm;
+    border-bottom: 0.5pt solid #d3d3d3;
+  }
+
+  .print-gallery-title {
+    font-family: "Playfair Display", ui-serif, Georgia, serif;
+    font-size: 14pt;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .print-gallery-title em {
+    font-style: italic;
+  }
+
+  .print-gallery-count {
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 6.5pt;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    opacity: 0.35;
+  }
+
+  .print-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35cm;
+  }
+
+  .print-gallery-item {
+    break-inside: avoid;
+    display: block;
+  }
+
+  .print-gallery-item img {
+    display: block;
+    width: 100%;
+    height: 5cm;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* ── Hide real footer, replace with single-line ── */
+  footer {
+    display: none !important;
+  }
+
+  .print-footer-line {
+    display: flex !important;
+    align-items: center;
+    gap: 0.3cm;
+    margin-top: 0.6cm;
+    padding-top: 0.35cm;
+    border-top: 0.5pt solid #d3d3d3;
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 7pt;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: #1a1a1a;
+    opacity: 0.45;
+  }
+
+  .print-footer-dot {
+    opacity: 0.35;
+  }
+}
