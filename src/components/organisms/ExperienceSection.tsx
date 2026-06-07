@@ -90,21 +90,21 @@ function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
 }
 
 const CATEGORY_META: Record<string, { label: string; accentLabel: string; index: string }> = {
-  work:       { label: 'Work',       accentLabel: 'experience', index: '01' },
-  freelance:  { label: 'Freelance',  accentLabel: 'commissions', index: '02' },
-  university: { label: 'University', accentLabel: 'projects',    index: '03' },
+  work: { label: 'Work', accentLabel: 'experience', index: '01' },
+  freelance: { label: 'Freelance', accentLabel: 'commissions', index: '02' },
+  university: { label: 'University', accentLabel: 'projects', index: '03' },
 }
 
 const MOCK_EXPERIENCES: (Experience & { galleryCount: number })[] = [
-  { _id: 'w1', title: 'Notting Hill Townhouse',  slug: { current: 'notting-hill-townhouse'   }, studio: 'Studio Heritage',          year: 2024, location: 'London, UK',    description: 'A complete refurbishment of a four-storey Victorian townhouse.', category: 'work',       order: 1, galleryCount: 6 },
-  { _id: 'w2', title: 'Tribeca Loft Conversion', slug: { current: 'tribeca-loft-conversion'  }, studio: 'Atelier Caldwell',          year: 2023, location: 'New York, US',  description: 'A two-floor loft for a film editor, carved out of a former printing house.', category: 'work', order: 2, galleryCount: 5 },
-  { _id: 'w3', title: 'Hampstead Family Home',   slug: { current: 'hampstead-family-home'    }, studio: 'Norden & Co.',              year: 2022, location: 'London, UK',    description: 'A 1930s Arts & Crafts house, gently modernised for a family of five.', category: 'work',  order: 3, galleryCount: 4 },
-  { _id: 'f1', title: 'Boutique Hotel Suite',    slug: { current: 'boutique-hotel-suite'     }, studio: 'Maison Verte · Soho',       year: 2025, location: 'London, UK',    description: 'A signature suite for an eight-room boutique hotel.', category: 'freelance',    order: 1, galleryCount: 5 },
-  { _id: 'f2', title: 'Pied-à-Terre',            slug: { current: 'pied-a-terre-cannes'      }, studio: 'Côte Apartment · Cannes',   year: 2024, location: 'Cannes, FR',   description: 'A two-bedroom apartment overlooking the Croisette.', category: 'freelance',     order: 2, galleryCount: 6 },
-  { _id: 'f3', title: 'Cotswold Retreat',        slug: { current: 'cotswold-retreat'         }, studio: 'Birch House · Private',     year: 2023, location: 'Cotswolds, UK', description: 'A weekend cottage for a couple who wanted to bring outside in.', category: 'freelance', order: 3, galleryCount: 4 },
-  { _id: 'u1', title: 'Vessel & Void',           slug: { current: 'vessel-and-void'          }, studio: 'AUB Final Project',         year: 2021, location: 'Beirut, LB',   description: 'Final-year thesis exploring negative space in ceramic form.', category: 'university',  order: 1, galleryCount: 8 },
-  { _id: 'u2', title: 'Surface Studies',         slug: { current: 'surface-studies-florence' }, studio: 'Exchange Studio',           year: 2020, location: 'Florence, IT',  description: 'Semester residency — surface texture and natural pigments.', category: 'university',  order: 2, galleryCount: 5 },
-  { _id: 'u3', title: 'Natural Pigments Research', slug: { current: 'natural-pigments-research' }, studio: 'Research Grant',         year: 2019, location: 'Beirut, LB',   description: 'Archival study of plant-based dye traditions in the Levant.', category: 'university',  order: 3, galleryCount: 3 },
+  { _id: 'w1', title: 'Notting Hill Townhouse', slug: { current: 'notting-hill-townhouse' }, studio: 'Studio Heritage', year: 2024, location: 'London, UK', description: 'A complete refurbishment of a four-storey Victorian townhouse.', category: 'work', order: 1, galleryCount: 6 },
+  { _id: 'w2', title: 'Tribeca Loft Conversion', slug: { current: 'tribeca-loft-conversion' }, studio: 'Atelier Caldwell', year: 2023, location: 'New York, US', description: 'A two-floor loft for a film editor, carved out of a former printing house.', category: 'work', order: 2, galleryCount: 5 },
+  { _id: 'w3', title: 'Hampstead Family Home', slug: { current: 'hampstead-family-home' }, studio: 'Norden & Co.', year: 2022, location: 'London, UK', description: 'A 1930s Arts & Crafts house, gently modernised for a family of five.', category: 'work', order: 3, galleryCount: 4 },
+  { _id: 'f1', title: 'Boutique Hotel Suite', slug: { current: 'boutique-hotel-suite' }, studio: 'Maison Verte · Soho', year: 2025, location: 'London, UK', description: 'A signature suite for an eight-room boutique hotel.', category: 'freelance', order: 1, galleryCount: 5 },
+  { _id: 'f2', title: 'Pied-à-Terre', slug: { current: 'pied-a-terre-cannes' }, studio: 'Côte Apartment · Cannes', year: 2024, location: 'Cannes, FR', description: 'A two-bedroom apartment overlooking the Croisette.', category: 'freelance', order: 2, galleryCount: 6 },
+  { _id: 'f3', title: 'Cotswold Retreat', slug: { current: 'cotswold-retreat' }, studio: 'Birch House · Private', year: 2023, location: 'Cotswolds, UK', description: 'A weekend cottage for a couple who wanted to bring outside in.', category: 'freelance', order: 3, galleryCount: 4 },
+  { _id: 'u1', title: 'Vessel & Void', slug: { current: 'vessel-and-void' }, studio: 'AUB Final Project', year: 2021, location: 'Beirut, LB', description: 'Final-year thesis exploring negative space in ceramic form.', category: 'university', order: 1, galleryCount: 8 },
+  { _id: 'u2', title: 'Surface Studies', slug: { current: 'surface-studies-florence' }, studio: 'Exchange Studio', year: 2020, location: 'Florence, IT', description: 'Semester residency — surface texture and natural pigments.', category: 'university', order: 2, galleryCount: 5 },
+  { _id: 'u3', title: 'Natural Pigments Research', slug: { current: 'natural-pigments-research' }, studio: 'Research Grant', year: 2019, location: 'Beirut, LB', description: 'Archival study of plant-based dye traditions in the Levant.', category: 'university', order: 3, galleryCount: 3 },
 ]
 
 const CATEGORY_ORDER = ['work', 'freelance', 'university'] as const
