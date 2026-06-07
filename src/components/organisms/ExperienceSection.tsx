@@ -113,7 +113,7 @@ function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }:
           </span>
           <h3 className="min-w-0 font-serif text-2xl md:text-3xl leading-none">
             <span>{cat.label} </span>
-            <span className="italic text-earth-terracotta">{cat.accentLabel}</span>
+            <span className={cn('italic transition-colors duration-200', isOpen ? 'text-earth-cream/35' : 'text-earth-forest/50')}>{cat.accentLabel}</span>
           </h3>
         </div>
 
@@ -214,7 +214,7 @@ export function ExperienceSection() {
             style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}
           >
             <span className="text-earth-forest">My </span>
-            <span className="italic text-earth-terracotta">experience</span>
+            <span className="italic text-earth">experience</span>
           </h2>
         </div>
 
