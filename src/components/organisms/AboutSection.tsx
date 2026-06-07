@@ -93,7 +93,7 @@ export function AboutSection() {
           <div ref={processRef} className="fade-up">
             <p className="text-xs tracking-[0.2em] text-earth-sage uppercase mb-4">the process</p>
             <h3 className="font-serif italic text-4xl md:text-5xl text-earth-forest tracking-[-0.02em] leading-[1.15] mb-16">
-              How a piece comes to life
+              How Design come to life
             </h3>
 
             <div className="grid md:grid-cols-2 gap-12">
