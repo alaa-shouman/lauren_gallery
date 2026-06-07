@@ -51,7 +51,7 @@ export default function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-<Route path="/experience/:slug" element={<ExperienceDetailPage />} />
+          <Route path="/experience/:slug" element={<ExperienceDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>

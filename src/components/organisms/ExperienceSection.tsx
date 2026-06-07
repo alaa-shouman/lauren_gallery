@@ -136,12 +136,12 @@ function CategoryAccordion({ cat, items, isOpen, onToggle, onSelectExp }: Catego
       >
         <div className="flex items-center gap-4">
           <span className={cn(
-            'text-xs font-mono tracking-widest transition-colors duration-200',
+            'inline-flex shrink-0 items-center whitespace-nowrap text-xs font-mono tracking-widest transition-colors duration-200',
             isOpen ? 'text-earth-cream/40' : 'text-earth-sage'
           )}>
             — {meta.index}
           </span>
-          <h3 className="font-serif text-2xl md:text-3xl leading-none">
+          <h3 className="min-w-0 font-serif text-2xl md:text-3xl leading-none">
             {cat === 'freelance' ? (
               <>
                 <span className={cn('italic transition-colors duration-200', isOpen ? 'text-earth-terracotta' : 'text-earth-terracotta')}>
