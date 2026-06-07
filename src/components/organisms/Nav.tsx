@@ -27,11 +27,8 @@ export function Nav() {
   }, [])
 
   useEffect(() => {
-    // Defer closing the mobile menu to avoid synchronous setState inside the effect.
-    if (!menuOpen) return
-    const t = window.setTimeout(() => setMenuOpen(false), 0)
-    return () => clearTimeout(t)
-  }, [location.pathname, menuOpen])
+    setMenuOpen(false)
+  }, [location.pathname])
 
   // Track active section via IntersectionObserver when on home page
   useEffect(() => {
