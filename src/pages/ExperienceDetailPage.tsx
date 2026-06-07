@@ -13,14 +13,14 @@ const CATEGORY_LABEL: Record<string, string> = {
 }
 
 const PICSUM_SEEDS: Record<string, number[]> = {
-  'notting-hill-townhouse':    [237, 338, 447, 554, 661, 772],
-  'tribeca-loft-conversion':   [292, 345, 412, 521, 634, 789],
-  'hampstead-family-home':     [669, 113, 228, 337, 446, 555],
-  'boutique-hotel-suite':      [573, 274, 381, 490, 605, 714],
-  'pied-a-terre-cannes':       [617, 199, 308, 417, 526, 635],
-  'cotswold-retreat':          [399, 147, 256, 365, 474, 583],
-  'vessel-and-void':           [835, 102, 203, 304, 405, 506],
-  'surface-studies-florence':  [167, 268, 369, 470, 571, 672],
+  'notting-hill-townhouse': [237, 338, 447, 554, 661, 772],
+  'tribeca-loft-conversion': [292, 345, 412, 521, 634, 789],
+  'hampstead-family-home': [669, 113, 228, 337, 446, 555],
+  'boutique-hotel-suite': [573, 274, 381, 490, 605, 714],
+  'pied-a-terre-cannes': [617, 199, 308, 417, 526, 635],
+  'cotswold-retreat': [399, 147, 256, 365, 474, 583],
+  'vessel-and-void': [835, 102, 203, 304, 405, 506],
+  'surface-studies-florence': [167, 268, 369, 470, 571, 672],
   'natural-pigments-research': [432, 533, 634, 735, 836, 937],
 }
 
