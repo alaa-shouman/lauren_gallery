@@ -171,22 +171,22 @@ export function ExperienceDetailPage() {
 
         {/* Sticky secondary bar */}
         <div className="sticky top-16 md:top-20 z-30 bg-earth-cream/95 backdrop-blur-sm border-b border-earth-sand/70">
-          <div className="mx-auto max-w-280 px-6 h-14 flex items-center justify-between">
+          <div className="mx-auto max-w-280 px-6 py-3 sm:py-0 min-h-14 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:h-14">
             <button
               onClick={goBack}
-              className="flex items-center gap-2 bg-earth-forest text-earth-cream text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-terracotta transition-colors duration-300"
+              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-earth-forest text-earth-cream text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-terracotta transition-colors duration-300"
             >
               ← Back to projects
             </button>
 
-            <div className="flex items-center gap-3">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
               {hasSanityPdf ? (
                 <a
                   href={exp.projectPdf!.asset.url}
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
+                  className="flex w-full sm:w-auto items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
                 >
                   <DownloadIcon />
                   Download PDF
@@ -195,18 +195,18 @@ export function ExperienceDetailPage() {
                 <div className="group relative">
                   <button
                     onClick={() => window.print()}
-                    className="flex items-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
+                    className="flex w-full sm:w-auto items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
                   >
                     <PrinterIcon />
                     Save as PDF
                   </button>
-                  <span className="pointer-events-none absolute top-full right-0 mt-2 whitespace-nowrap rounded-lg bg-earth-forest text-earth-cream text-[10px] px-3 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                  <span className="pointer-events-none absolute top-full right-0 mt-2 hidden whitespace-nowrap rounded-lg bg-earth-forest text-earth-cream text-[10px] px-3 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 sm:block">
                     Select "Save as PDF" in the print dialog
                   </span>
                 </div>
               )}
 
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium leading-none mb-1">
                   {categoryLabel}
                 </p>
