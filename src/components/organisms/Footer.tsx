@@ -40,7 +40,7 @@ export function Footer() {
 
           <div className="flex flex-col md:items-end gap-4">
             <nav className="flex gap-6">
-              {(['work', 'about', 'contact'] as const).map((section) => (
+              {(['Designs', 'About Me', 'Contact info'] as const).map((section) => (
                 <button
                   key={section}
                   onClick={() => handleFooterLink(section)}

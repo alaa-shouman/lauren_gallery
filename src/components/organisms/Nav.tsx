@@ -3,9 +3,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
-  { label: 'work', section: 'work' },
-  { label: 'about', section: 'about' },
-  { label: 'contact', section: 'contact' },
+  { label: 'Designs', section: 'designs' },
+  { label: 'About Me', section: 'about' },
+  { label: 'Contact info', section: 'contact' },
 ]
 
 function scrollToSection(sectionId: string) {
@@ -36,7 +36,7 @@ export function Nav() {
       setActiveSection('')
       return
     }
-    const sectionIds = ['hero', 'work', 'about', 'testimonials', 'press', 'contact']
+    const sectionIds = ['hero', 'designs', 'about', 'testimonials', 'press', 'contact']
     const observers: IntersectionObserver[] = []
 
     sectionIds.forEach((id) => {
