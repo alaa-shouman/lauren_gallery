@@ -36,7 +36,7 @@ export function SocialSection() {
   return (
     <section id="contact" className="py-24 md:py-32 bg-earth-cream">
       <div className="mx-auto max-w-280 px-6 text-center">
-        <p className="text-xs tracking-[0.22em] text-earth-sage font-medium uppercase mb-5">
+        <p className="text-xs tracking-[0.22em] text-grey-light font-medium uppercase mb-5">
           get in touch
         </p>
 
@@ -44,7 +44,7 @@ export function SocialSection() {
           Let's work together.
         </h2>
 
-        <p className="text-earth-forest/50 font-light mb-12 max-w-sm mx-auto">
+        <p className="text-grey-mid font-light mb-12 max-w-sm mx-auto">
           Open to projects and collaborations. Reach out directly:        </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -93,7 +93,7 @@ export function SocialSection() {
         </div>
 
         {settings?.email && (
-          <p className="mt-10 text-sm text-earth-forest/40">
+          <p className="mt-10 text-sm text-grey-light">
             or email{' '}
             <a
               href={`mailto:${settings.email}`}

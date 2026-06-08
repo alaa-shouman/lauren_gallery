@@ -7,6 +7,7 @@ export interface SanityImage {
     }
   }
   alt?: string
+  caption?: string
 }
 
 export interface HeroData {

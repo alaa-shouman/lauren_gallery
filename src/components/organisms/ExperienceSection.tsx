@@ -49,11 +49,11 @@ function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
         <h4 className="font-serif text-lg md:text-xl text-earth-forest leading-tight mb-1 truncate">
           {exp.title}
         </h4>
-        <p className="text-xs text-earth-forest/45 mb-2">
+        <p className="text-xs text-grey-light mb-2">
           {[exp.studio, exp.year, exp.location].filter(Boolean).join(' · ')}
         </p>
         {exp.description && (
-          <p className="hidden md:block text-sm text-earth-forest/55 font-light leading-snug line-clamp-1">
+          <p className="hidden md:block text-sm text-grey-mid font-light leading-snug line-clamp-1">
             {exp.description}
           </p>
         )}
@@ -62,7 +62,7 @@ function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
       {/* Right: image count + CTA */}
       <div className="shrink-0 flex items-center gap-3 md:gap-4">
         {imageLabel && (
-          <span className="hidden md:block text-xs text-earth-forest/35 font-mono tracking-wide">
+          <span className="hidden md:block text-xs text-grey-light font-mono tracking-wide">
             {imageLabel}
           </span>
         )}
@@ -107,20 +107,20 @@ function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }:
         <div className="flex items-center gap-4">
           <span className={cn(
             'inline-flex shrink-0 items-center whitespace-nowrap text-xs font-mono tracking-widest transition-colors duration-200',
-            isOpen ? 'text-earth-cream/40' : 'text-earth-sage'
+            isOpen ? 'text-earth-cream/40' : 'text-grey-light'
           )}>
             — {displayIndex}
           </span>
           <h3 className="min-w-0 font-serif text-2xl md:text-3xl leading-none">
             <span>{cat.label} </span>
-            <span className={cn('italic transition-colors duration-200', isOpen ? 'text-earth-cream/35' : 'text-earth-forest/50')}>{cat.accentLabel}</span>
+            <span className={cn('italic transition-colors duration-200', isOpen ? 'text-earth-cream/35' : 'text-grey-mid')}>{cat.accentLabel}</span>
           </h3>
         </div>
 
         <div className="flex items-center gap-4">
           <span className={cn(
             'hidden md:block text-xs tracking-wide transition-colors duration-200',
-            isOpen ? 'text-earth-cream/40' : 'text-earth-forest/35'
+            isOpen ? 'text-earth-cream/40' : 'text-grey-light'
           )}>
             {items.length} {items.length === 1 ? 'project' : 'projects'}
             {dateRange && ` · ${dateRange}`}
@@ -207,7 +207,7 @@ export function ExperienceSection() {
 
         {/* Section heading */}
         <div className="mb-12 md:mb-16">
-          <p className="text-xs tracking-[0.2em] text-earth-sage uppercase font-medium mb-4">
+          <p className="text-xs tracking-[0.2em] text-grey-light uppercase font-medium mb-4">
             — Portfolio
           </p>
           <h2 className="font-serif leading-none tracking-[-0.02em]"

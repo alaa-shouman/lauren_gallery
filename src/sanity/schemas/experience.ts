@@ -74,6 +74,12 @@ export const experienceSchema = defineType({
           options: { hotspot: true },
           fields: [
             defineField({ name: 'alt', type: 'string', title: 'Alt text' }),
+            defineField({
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+              description: 'Optional caption shown below the image in the gallery and lightbox',
+            }),
           ],
         },
       ],

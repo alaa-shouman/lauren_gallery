@@ -22,7 +22,7 @@ export function HeroSection() {
       <div className="mx-auto max-w-280 w-full px-6 py-28 md:py-0 md:min-h-screen md:flex md:items-center">
 
         {/* Mobile label */}
-        <p className="md:hidden text-xs tracking-[0.22em] text-earth-sage font-medium uppercase mb-7">
+        <p className="md:hidden text-xs tracking-[0.22em] text-grey-light font-medium uppercase mb-7">
           — {role} · {location}
         </p>
 
@@ -31,7 +31,7 @@ export function HeroSection() {
           {/* Left: headline */}
           <div>
             {/* Desktop label */}
-            <p className="hidden md:block text-xs tracking-[0.22em] text-earth-sage font-medium uppercase mb-8">
+            <p className="hidden md:block text-xs tracking-[0.22em] text-grey-light font-medium uppercase mb-8">
               — {role} · {location}
             </p>
 
@@ -45,14 +45,14 @@ export function HeroSection() {
             </h1>
 
             {/* Mobile bio + tags */}
-            <p className="md:hidden mt-7 text-base font-light leading-relaxed text-earth-forest/65 max-w-sm">
+            <p className="md:hidden mt-7 text-base font-light leading-relaxed text-earth-forest max-w-sm">
               {bio}
             </p>
             <div className="md:hidden flex flex-wrap gap-2 mt-6">
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-4 py-1.5 rounded-full border border-earth-forest/15 text-xs text-earth-forest/60 font-medium"
+                  className="px-4 py-1.5 rounded-full border border-earth-forest/15 text-xs text-grey-mid font-medium"
                 >
                   {tag}
                 </span>
@@ -68,7 +68,7 @@ export function HeroSection() {
               <div className="absolute right-16 top-14 w-24 h-24 rounded-full bg-earth-terracotta/25" />
             </div>
 
-            <p className="text-base font-light leading-relaxed text-earth-forest/65 mb-7">
+            <p className="text-base font-light leading-relaxed text-earth-forest mb-7">
               {bio}
             </p>
 
@@ -76,7 +76,7 @@ export function HeroSection() {
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-4 py-1.5 rounded-full border border-earth-forest/15 text-xs text-earth-forest/60 font-medium"
+                  className="px-4 py-1.5 rounded-full border border-earth-forest/15 text-xs text-grey-mid font-medium"
                 >
                   {tag}
                 </span>
