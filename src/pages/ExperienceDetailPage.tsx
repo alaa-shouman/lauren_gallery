@@ -36,31 +36,41 @@ function splitTitle(title: string): [string, string] {
 function InfoCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-white rounded-2xl px-5 py-4 border border-earth-sand flex flex-col gap-2">
-      <span className="text-[10px] tracking-[0.18em] text-earth-forest/40 uppercase font-medium">{label}</span>
+      <span className="text-[10px] tracking-[0.18em] text-grey-light uppercase font-medium">{label}</span>
       <span className="font-serif italic text-xl md:text-2xl text-earth-forest leading-tight">{value}</span>
     </div>
   )
 }
 
-function GalleryImage({ src, alt, index, total, onClick }: {
-  src: string; alt: string; index: number; total: number; onClick: () => void
+function GalleryImage({ src, alt, caption, index, total, onClick }: {
+  src: string; alt: string; caption?: string; index: number; total: number; onClick: () => void
 }) {
   return (
-    <button
-      onClick={onClick}
-      className="relative aspect-square overflow-hidden rounded-xl bg-earth-sand group block w-full"
-      aria-label={`View image ${index + 1} of ${total} fullscreen`}
-    >
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-      />
-      <span className="absolute top-3 left-3 text-[10px] font-mono tracking-[0.15em] text-white/80 mix-blend-difference">
-        {String(index + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}
-      </span>
-    </button>
+    <figure className="group">
+      <button
+        onClick={onClick}
+        className="relative aspect-square overflow-hidden rounded-xl bg-earth-sand block w-full"
+        aria-label={`View image ${index + 1} of ${total} fullscreen`}
+      >
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+      </button>
+      {/* Editorial label — figure index + optional caption, always visible */}
+      <figcaption className="mt-2.5 flex gap-2.5">
+        <span className="shrink-0 pt-px text-[10px] font-mono tracking-[0.15em] text-grey-light tabular-nums">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        {caption && (
+          <span className="text-xs text-grey-mid font-light leading-snug line-clamp-2">
+            {caption}
+          </span>
+        )}
+      </figcaption>
+    </figure>
   )
 }
 
@@ -99,7 +109,7 @@ export function ExperienceDetailPage() {
     }
   }
 
-  const galleryImages: { src: string; alt: string }[] = (() => {
+  const galleryImages: { src: string; alt: string; caption?: string }[] = (() => {
     if (!slug) return []
     const sanityImages = exp?.gallery ?? []
     const seeds = PICSUM_SEEDS[slug] ?? []
@@ -109,6 +119,7 @@ export function ExperienceDetailPage() {
       return {
         src: si?.asset ? urlFor(si).width(900).height(700).fit('crop').url() : getPicsumUrl(slug, i),
         alt: si?.alt ?? `${exp?.title ?? 'Project'} — image ${i + 1}`,
+        caption: si?.caption,
       }
     })
   })()
@@ -149,8 +160,8 @@ export function ExperienceDetailPage() {
     return (
       <main className="min-h-screen bg-earth-cream pt-16 md:pt-20 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-earth-forest/40 mb-4">Project not found.</p>
-          <button onClick={goBack} className="text-sm text-earth-sage hover:text-earth-forest transition-colors">
+          <p className="text-grey-light mb-4">Project not found.</p>
+          <button onClick={goBack} className="text-sm text-grey-light hover:text-earth-forest transition-colors">
             ← Back
           </button>
         </div>
@@ -207,7 +218,7 @@ export function ExperienceDetailPage() {
                 <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium leading-none mb-1">
                   {categoryLabel}
                 </p>
-                <p className="text-[10px] tracking-[0.12em] text-earth-forest/40 uppercase leading-none">
+                <p className="text-[10px] tracking-[0.12em] text-grey-light uppercase leading-none">
                   {[exp.studio, exp.year].filter(Boolean).join(' · ')}
                 </p>
               </div>
@@ -223,19 +234,19 @@ export function ExperienceDetailPage() {
                 — {categoryLabel}
               </p>
               <h1
-                className="font-serif leading-none tracking-[-0.02em] mb-4"
+                className="font-serif leading-tight tracking-[-0.02em] mb-4"
                 style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}
               >
-                <span className="block text-earth-forest">{titleMain}</span>
-                <span className="block italic text-earth-terracotta">{titleAccent}</span>
+                <span className="text-earth-forest">{titleMain} </span>
+                <span className="italic text-earth-terracotta">{titleAccent}</span>
               </h1>
               {(exp.studio || exp.role) && (
-                <p className="font-serif italic text-earth-forest/45 text-lg mb-8">
+                <p className="font-serif italic text-grey-mid text-lg mb-8">
                   {[exp.studio, exp.role].filter(Boolean).join(', ')}
                 </p>
               )}
               {exp.description && (
-                <p className="text-earth-forest/65 font-light leading-relaxed text-base md:text-[1.05rem] max-w-lg">
+                <p className="text-earth-forest font-light leading-relaxed text-base md:text-[1.05rem] max-w-lg">
                   {exp.description}
                 </p>
               )}
@@ -250,12 +261,12 @@ export function ExperienceDetailPage() {
               </div>
               {exp.materials && exp.materials.length > 0 && (
                 <div>
-                  <p className="text-[10px] tracking-[0.18em] text-earth-forest/40 uppercase font-medium mb-3">
+                  <p className="text-[10px] tracking-[0.18em] text-grey-light uppercase font-medium mb-3">
                     — Materials
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {exp.materials.map((m) => (
-                      <span key={m} className="px-3.5 py-1.5 rounded-full border border-earth-forest/15 text-xs text-earth-forest/60 font-medium">
+                      <span key={m} className="px-3.5 py-1.5 rounded-full border border-earth-forest/15 text-xs text-grey-mid font-medium">
                         {m}
                       </span>
                     ))}
@@ -274,7 +285,7 @@ export function ExperienceDetailPage() {
                 <h2 className="font-serif text-2xl md:text-3xl text-earth-forest">
                   Project <span className="italic text-earth-terracotta">gallery</span>
                 </h2>
-                <span className="text-[10px] tracking-[0.18em] text-earth-forest/35 uppercase hidden md:block">
+                <span className="text-[10px] tracking-[0.18em] text-grey-light uppercase hidden md:block">
                   {galleryImages.length} image{galleryImages.length !== 1 ? 's' : ''} · tap to enlarge
                 </span>
               </div>
@@ -284,6 +295,7 @@ export function ExperienceDetailPage() {
                     key={i}
                     src={img.src}
                     alt={img.alt}
+                    caption={img.caption}
                     index={i}
                     total={galleryImages.length}
                     onClick={() => setLightboxIndex(i)}
@@ -373,6 +385,9 @@ export function ExperienceDetailPage() {
               {galleryImages.map((img, i) => (
                 <div key={i} className="print-gallery-item">
                   <img src={img.src} alt={img.alt} loading="eager" />
+                  {img.caption && (
+                    <p className="print-gallery-caption">{img.caption}</p>
+                  )}
                 </div>
               ))}
             </div>

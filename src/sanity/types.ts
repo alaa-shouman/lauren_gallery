@@ -7,6 +7,7 @@ export interface SanityImage {
     }
   }
   alt?: string
+  caption?: string
 }
 
 export interface HeroData {
@@ -73,6 +74,6 @@ export interface SiteSettings {
   role?: string
   location?: string
   whatsapp?: string
-  instagram?: string
+  linkedin?: string
   resume?: { asset: { url: string } }
 }

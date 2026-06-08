@@ -52,7 +52,7 @@ export function AboutSection() {
 
             {/* Bio */}
             <div className="md:pt-8">
-              <p className="text-xs tracking-[0.2em] text-earth-sage uppercase mb-4">
+              <p className="text-xs tracking-[0.2em] text-grey-light uppercase mb-4">
                 {about?.sectionLabel ?? 'the maker'}
               </p>
               <h2 className="font-serif italic text-5xl md:text-6xl text-earth-forest tracking-[-0.02em] leading-[1.1] mb-10">
@@ -68,7 +68,7 @@ export function AboutSection() {
               ) : about?.bio ? (
                 <PortableTextRenderer value={about.bio} />
               ) : (
-                <p className="text-earth-forest/65 font-light leading-relaxed">
+                <p className="text-earth-forest font-light leading-relaxed">
                   Lauren Khafaji is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
                   <br /><br />
                   Based in the hills, she draws from the quiet rhythms of nature: the texture of bark, the weight of river stones, the way light falls through linen. Her work is an invitation to slow down and notice.
@@ -91,7 +91,7 @@ export function AboutSection() {
       <div className="py-24 bg-cream">
         <div className="mx-auto max-w-280 px-6">
           <div ref={processRef} className="fade-up">
-            <p className="text-xs tracking-[0.2em] text-earth-sage uppercase mb-4">the process</p>
+            <p className="text-xs tracking-[0.2em] text-grey-light uppercase mb-4">the process</p>
             <h3 className="font-serif italic text-4xl md:text-5xl text-earth-forest tracking-[-0.02em] leading-[1.15] mb-16">
               How designs come to life
             </h3>
@@ -104,7 +104,7 @@ export function AboutSection() {
                   </span>
                   <div className="relative z-10 pt-8">
                     <h4 className="font-serif italic text-2xl text-earth-forest mb-3">{step.title}</h4>
-                    <p className="text-earth-forest/60 font-light leading-relaxed">{step.description}</p>
+                    <p className="text-grey-mid font-light leading-relaxed">{step.description}</p>
                   </div>
                 </div>
               ))}

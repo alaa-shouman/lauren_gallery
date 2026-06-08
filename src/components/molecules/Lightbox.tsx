@@ -3,6 +3,7 @@ import { useEffect, useCallback, useState, useRef } from 'react'
 interface LightboxImage {
   src: string
   alt: string
+  caption?: string
 }
 
 interface LightboxProps {
@@ -91,7 +92,7 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
           ref={imgRef}
           src={image.src}
           alt={image.alt}
-          className="max-h-[80vh] object-contain rounded-xl select-none"
+          className="max-h-[75vh] object-contain rounded-xl select-none"
           style={{
             transform: `scale(${scale})`,
             transition: 'transform 0.2s ease',
@@ -102,10 +103,12 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
           onClick={isZoomed ? resetZoom : undefined}
         />
 
-        {image.alt && !isZoomed && (
-          <p className="absolute -bottom-8 left-0 right-0 text-center text-sm text-earth-cream/50">
-            {image.alt}
-          </p>
+        {image.caption && !isZoomed && (
+          <div className="absolute -bottom-10 left-0 right-0 flex flex-col items-center gap-0.5 px-4">
+            <p className="text-center text-sm text-earth-cream/80 font-light leading-snug max-w-lg">
+              {image.caption}
+            </p>
+          </div>
         )}
       </div>
 

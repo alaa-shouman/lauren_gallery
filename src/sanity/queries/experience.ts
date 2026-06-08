@@ -44,7 +44,7 @@ export const experienceBySlugQuery = groq`
     },
     externalUrl,
     coverImage { asset->, alt },
-    gallery[] { asset->, alt },
+    gallery[] { asset->, alt, caption },
     projectPdf { asset-> }
   }
 `
