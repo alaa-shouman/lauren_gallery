@@ -42,10 +42,10 @@ export const siteSettingsSchema = defineType({
       description: 'Include country code, no spaces, e.g. "+9613123456"',
     }),
     defineField({
-      name: 'instagram',
-      title: 'Instagram Handle',
+      name: 'linkedin',
+      title: 'LinkedIn Profile URL or Handle',
       type: 'string',
-      description: 'Without @, e.g. "laurenkhafaji"',
+      description: 'Full URL or just the handle, e.g. "lauren-khafaji"',
     }),
     defineField({
       name: 'resume',

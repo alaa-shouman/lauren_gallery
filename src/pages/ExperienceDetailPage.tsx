@@ -223,11 +223,11 @@ export function ExperienceDetailPage() {
                 — {categoryLabel}
               </p>
               <h1
-                className="font-serif leading-none tracking-[-0.02em] mb-4"
+                className="font-serif leading-tight tracking-[-0.02em] mb-4"
                 style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}
               >
-                <span className="block text-earth-forest">{titleMain}</span>
-                <span className="block italic text-earth-terracotta">{titleAccent}</span>
+                <span className="text-earth-forest">{titleMain} </span>
+                <span className="italic text-earth-terracotta">{titleAccent}</span>
               </h1>
               {(exp.studio || exp.role) && (
                 <p className="font-serif italic text-earth-forest/45 text-lg mb-8">

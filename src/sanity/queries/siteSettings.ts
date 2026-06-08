@@ -10,7 +10,7 @@ export const siteSettingsQuery = groq`
     role,
     location,
     whatsapp,
-    instagram,
+    linkedin,
     resume { asset-> }
   }
 `

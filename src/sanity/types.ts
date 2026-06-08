@@ -73,6 +73,6 @@ export interface SiteSettings {
   role?: string
   location?: string
   whatsapp?: string
-  instagram?: string
+  linkedin?: string
   resume?: { asset: { url: string } }
 }
