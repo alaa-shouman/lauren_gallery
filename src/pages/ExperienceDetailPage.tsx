@@ -46,39 +46,31 @@ function GalleryImage({ src, alt, caption, index, total, onClick }: {
   src: string; alt: string; caption?: string; index: number; total: number; onClick: () => void
 }) {
   return (
-    <button
-      onClick={onClick}
-      className="relative overflow-hidden rounded-xl bg-earth-sand group block w-full"
-      aria-label={`View image ${index + 1} of ${total} fullscreen`}
-    >
-      <div className="aspect-square">
+    <figure className="group">
+      <button
+        onClick={onClick}
+        className="relative aspect-square overflow-hidden rounded-xl bg-earth-sand block w-full"
+        aria-label={`View image ${index + 1} of ${total} fullscreen`}
+      >
         <img
           src={src}
           alt={alt}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
         />
-      </div>
-      {/* Counter badge */}
-      <span className="absolute top-3 left-3 text-[10px] font-mono tracking-[0.15em] text-white/80 mix-blend-difference">
-        {String(index + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}
-      </span>
-      {/* Caption overlay — slides up on hover (desktop), always visible on mobile if present */}
-      {caption && (
-        <>
-          {/* Desktop: slide-up overlay */}
-          <div className="hidden md:flex absolute inset-x-0 bottom-0 items-end bg-linear-to-t from-earth-forest/80 via-earth-forest/40 to-transparent px-4 pt-10 pb-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
-            <p className="text-earth-cream text-xs font-light leading-snug text-left line-clamp-2">
-              {caption}
-            </p>
-          </div>
-          {/* Mobile: caption below the image */}
-          <p className="md:hidden px-1 pt-2 pb-1 text-[11px] text-grey-mid font-light leading-snug text-left line-clamp-2">
+      </button>
+      {/* Editorial label — figure index + optional caption, always visible */}
+      <figcaption className="mt-2.5 flex gap-2.5">
+        <span className="shrink-0 pt-px text-[10px] font-mono tracking-[0.15em] text-grey-light tabular-nums">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        {caption && (
+          <span className="text-xs text-grey-mid font-light leading-snug line-clamp-2">
             {caption}
-          </p>
-        </>
-      )}
-    </button>
+          </span>
+        )}
+      </figcaption>
+    </figure>
   )
 }
 
