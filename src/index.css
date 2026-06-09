@@ -197,24 +197,9 @@
     display: block !important;
   }
 
-  /* ── Nav: release fixed, print once at top ── */
+  /* ── Nav: hidden in print — the sheet carries its own title + footer branding ── */
   header {
-    position: static !important;
-    backdrop-filter: none !important;
-    background: #f9f9f8 !important;
-    border-bottom: 0.5pt solid #d3d3d3 !important;
-    padding: 0.3cm 1cm !important;
-    margin-bottom: 0.4cm !important;
-  }
-
-  /* Hide hamburger button */
-  header nav > button {
     display: none !important;
-  }
-
-  /* Show desktop nav links in print */
-  header nav > ul {
-    display: flex !important;
   }
 
   /* ── Main ── */
@@ -254,8 +239,8 @@
   /* ── Project header ── */
   .print-header {
     border-bottom: 1pt solid #1a1a1a;
-    padding-bottom: 0.5cm;
-    margin-bottom: 0.55cm;
+    padding-bottom: 0.3cm;
+    margin-bottom: 0.35cm;
   }
 
   .print-eyebrow {
@@ -266,18 +251,18 @@
     text-transform: uppercase;
     color: #1a1a1a;
     opacity: 0.4;
-    margin: 0 0 0.25cm 0;
+    margin: 0 0 0.15cm 0;
     display: block;
   }
 
   .print-title {
     font-family: "Playfair Display", ui-serif, Georgia, serif;
-    font-size: 28pt;
+    font-size: 22pt;
     font-weight: 400;
-    line-height: 1.1;
+    line-height: 1.08;
     letter-spacing: -0.01em;
     color: #1a1a1a;
-    margin: 0 0 0.15cm 0;
+    margin: 0 0 0.1cm 0;
   }
 
   .print-title em {
@@ -297,18 +282,18 @@
   .print-body {
     display: grid;
     grid-template-columns: 1.9fr 1fr;
-    gap: 0.9cm;
-    margin-bottom: 0.6cm;
-    padding-bottom: 0.6cm;
+    gap: 0.7cm;
+    margin-bottom: 0.4cm;
+    padding-bottom: 0.4cm;
     border-bottom: 0.5pt solid #d3d3d3;
     align-items: start;
   }
 
   .print-description {
     font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-    font-size: 9.5pt;
+    font-size: 9pt;
     font-weight: 300;
-    line-height: 1.75;
+    line-height: 1.5;
     color: #1a1a1a;
     margin: 0;
   }
@@ -316,7 +301,7 @@
   .print-meta {
     display: flex;
     flex-direction: column;
-    gap: 0.25cm;
+    gap: 0.18cm;
   }
 
   .print-meta-item {
@@ -339,23 +324,24 @@
   .print-meta-value {
     font-family: "Playfair Display", ui-serif, Georgia, serif;
     font-style: italic;
-    font-size: 12pt;
+    font-size: 11pt;
     color: #1a1a1a;
-    line-height: 1.2;
+    line-height: 1.15;
     display: block;
   }
 
   /* ── Gallery ── */
   .print-gallery-section {
     break-before: auto;
+    break-inside: avoid;
   }
 
   .print-gallery-header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 0.4cm;
-    padding-bottom: 0.25cm;
+    margin-bottom: 0.3cm;
+    padding-bottom: 0.2cm;
     border-bottom: 0.5pt solid #d3d3d3;
   }
 
@@ -383,7 +369,7 @@
   .print-gallery-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.35cm;
+    gap: 0.3cm;
   }
 
   .print-gallery-item {
@@ -394,17 +380,17 @@
   .print-gallery-item img {
     display: block;
     width: 100%;
-    height: 5cm;
+    height: 3.6cm;
     object-fit: cover;
     object-position: center;
   }
 
   .print-gallery-caption {
-    margin-top: 0.2cm;
-    font-size: 7.5pt;
+    margin-top: 0.1cm;
+    font-size: 6.8pt;
     color: #666;
     font-style: italic;
-    line-height: 1.3;
+    line-height: 1.25;
   }
 
   /* ── Hide real footer, replace with single-line ── */
@@ -416,8 +402,8 @@
     display: flex !important;
     align-items: center;
     gap: 0.3cm;
-    margin-top: 0.6cm;
-    padding-top: 0.35cm;
+    margin-top: 0.4cm;
+    padding-top: 0.25cm;
     border-top: 0.5pt solid #d3d3d3;
     font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
     font-size: 7pt;

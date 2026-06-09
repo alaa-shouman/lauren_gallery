@@ -84,14 +84,6 @@ function DownloadIcon() {
   )
 }
 
-function PrinterIcon() {
-  return (
-    <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a1 1 0 001-1v-4a1 1 0 00-1-1H9a1 1 0 00-1 1v4a1 1 0 001 1zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-    </svg>
-  )
-}
-
 /* ── Page ────────────────────────────────────────────────────────────────────── */
 
 export function ExperienceDetailPage() {
@@ -99,6 +91,7 @@ export function ExperienceDetailPage() {
   const { data: exp, loading } = useSanity<Experience>(experienceBySlugQuery, { slug })
   const navigate = useNavigate()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [pdfBusy, setPdfBusy] = useState(false)
 
   function goBack() {
     if (window.history.length > 2) {
@@ -135,6 +128,52 @@ export function ExperienceDetailPage() {
     ? `${exp.category.label} ${exp.category.accentLabel}`.trim()
     : ''
   const hasSanityPdf = Boolean(exp?.projectPdf?.asset?.url)
+
+  async function handleGeneratePdf() {
+    if (!exp || pdfBusy) return
+    setPdfBusy(true)
+    try {
+      // react-pdf expects Node's Buffer global, which the browser lacks.
+      // Polyfill it before the engine loads. Kept in this lazy path so it
+      // never touches the main bundle.
+      const { Buffer } = await import('buffer')
+      ;(globalThis as typeof globalThis & { Buffer?: unknown }).Buffer ??= Buffer
+
+      // Lazy-load the PDF engine (~1MB) only when actually requested,
+      // so it never weighs on initial page load.
+      const [{ pdf }, { ProjectPdfDocument }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('@/components/pdf/ProjectPdfDocument'),
+      ])
+      const blob = await pdf(
+        <ProjectPdfDocument
+          titleMain={titleMain}
+          titleAccent={titleAccent}
+          categoryLabel={categoryLabel}
+          studio={exp.studio}
+          role={exp.role}
+          year={exp.year}
+          location={exp.location}
+          footprint={exp.footprint}
+          materials={exp.materials}
+          description={exp.description}
+          images={galleryImages}
+        />
+      ).toBlob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `Lauren-Khafaji-${exp.slug.current}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error('PDF generation failed', err)
+    } finally {
+      setPdfBusy(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -200,18 +239,14 @@ export function ExperienceDetailPage() {
                   Download PDF
                 </a>
               ) : (
-                <div className="group relative">
-                  <button
-                    onClick={() => window.print()}
-                    className="flex w-full sm:w-auto items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
-                  >
-                    <PrinterIcon />
-                    Save as PDF
-                  </button>
-                  <span className="pointer-events-none absolute top-full right-0 mt-2 hidden whitespace-nowrap rounded-lg bg-earth-forest text-earth-cream text-[10px] px-3 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 sm:block">
-                    Select "Save as PDF" in the print dialog
-                  </span>
-                </div>
+                <button
+                  onClick={handleGeneratePdf}
+                  disabled={pdfBusy}
+                  className="flex w-full sm:w-auto items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300 disabled:opacity-50 disabled:cursor-wait"
+                >
+                  <DownloadIcon />
+                  {pdfBusy ? 'Generating…' : 'Download PDF'}
+                </button>
               )}
 
               <div className="text-left sm:text-right">
