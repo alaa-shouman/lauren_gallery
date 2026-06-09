@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
-import { experienceBySlugQuery } from '@/sanity/queries/experience'
+import { experienceBySlugQuery, allExperiencesQuery } from '@/sanity/queries/experience'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
+import { useFadeIn } from '@/hooks/useFadeIn'
 import type { Experience } from '@/sanity/types'
 
 
@@ -89,9 +90,15 @@ function DownloadIcon() {
 export function ExperienceDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: exp, loading } = useSanity<Experience>(experienceBySlugQuery, { slug })
+  const { data: allExps } = useSanity<Experience[]>(allExperiencesQuery)
   const navigate = useNavigate()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [pdfBusy, setPdfBusy] = useState(false)
+
+  // Animation refs for premium scroll reveal
+  const contentRef = useFadeIn<HTMLDivElement>()
+  const galleryRef = useFadeIn<HTMLDivElement>()
+  const navRef = useFadeIn<HTMLDivElement>()
 
   function goBack() {
     if (window.history.length > 2) {
@@ -104,18 +111,30 @@ export function ExperienceDetailPage() {
 
   const galleryImages: { src: string; alt: string; caption?: string }[] = (() => {
     if (!slug) return []
-    const sanityImages = exp?.gallery ?? []
-    const seeds = PICSUM_SEEDS[slug] ?? []
-    const count = Math.max(sanityImages.length, seeds.length, 6)
-    return Array.from({ length: count }).map((_, i) => {
-      const si = sanityImages[i]
-      return {
-        src: si?.asset ? urlFor(si).width(900).height(700).fit('crop').url() : getPicsumUrl(slug, i),
-        alt: si?.alt ?? `${exp?.title ?? 'Project'} — image ${i + 1}`,
-        caption: si?.caption,
-      }
-    })
+    const sanityImages = exp?.gallery?.filter((img) => img?.asset) ?? []
+    
+    if (sanityImages.length > 0) {
+      return sanityImages.map((si, i) => ({
+        src: urlFor(si).width(900).height(700).fit('crop').url(),
+        alt: si.alt ?? `${exp?.title ?? 'Project'} — image ${i + 1}`,
+        caption: si.caption,
+      }))
+    } else {
+      const seeds = PICSUM_SEEDS[slug] ?? []
+      const count = Math.max(seeds.length, 6)
+      return Array.from({ length: count }).map((_, i) => ({
+        src: getPicsumUrl(slug, i),
+        alt: `${exp?.title ?? 'Project'} — image ${i + 1}`,
+        caption: undefined,
+      }))
+    }
   })()
+
+
+  // Find next/prev projects based on all experiences list
+  const currentIdx = allExps ? allExps.findIndex((e) => e.slug.current === slug) : -1
+  const prevExp = currentIdx > 0 ? allExps?.[currentIdx - 1] : null
+  const nextExp = currentIdx >= 0 && currentIdx < (allExps?.length ?? 0) - 1 ? allExps?.[currentIdx + 1] : null
 
   const closeLightbox = () => setLightboxIndex(null)
   const prevImage = () =>
@@ -262,7 +281,7 @@ export function ExperienceDetailPage() {
         </div>
 
         {/* Main content */}
-        <div className="mx-auto max-w-280 px-6 pt-14 pb-10">
+        <div ref={contentRef} className="fade-up mx-auto max-w-280 px-6 pt-10 pb-10">
           <div className="grid md:grid-cols-[3fr_2fr] gap-10 md:gap-16 items-start">
             <div>
               <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium mb-5">
@@ -314,7 +333,7 @@ export function ExperienceDetailPage() {
 
         {/* Gallery */}
         {galleryImages.length > 0 && (
-          <div className="border-t border-earth-sand mt-4">
+          <div ref={galleryRef} className="fade-up border-t border-earth-sand mt-4">
             <div className="mx-auto max-w-280 px-6 pt-12 pb-20">
               <div className="flex items-baseline justify-between mb-8">
                 <h2 className="font-serif text-2xl md:text-3xl text-earth-forest">
@@ -340,6 +359,73 @@ export function ExperienceDetailPage() {
             </div>
           </div>
         )}
+
+        {/* Project to Project Navigation */}
+        <div ref={navRef} className="fade-up border-t border-earth-sand bg-earth-cream/40">
+          <div className="mx-auto max-w-280 px-6 py-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center border-b border-earth-sand/50 pb-8 sm:border-none sm:pb-0">
+              {/* Previous Project */}
+              <div className="flex flex-col items-start w-full">
+                {prevExp ? (
+                  <Link
+                    to={`/experience/${prevExp.slug.current}`}
+                    className="group flex items-center gap-4 w-full text-left"
+                  >
+                    <div className="shrink-0 w-24 h-16 rounded-xl overflow-hidden bg-earth-sand border border-earth-sand shadow-[0_1px_6px_rgba(26,26,26,0.03)]">
+                      <img
+                        src={prevExp.coverImage?.asset
+                          ? urlFor(prevExp.coverImage).width(150).height(100).fit('crop').url()
+                          : `https://picsum.photos/seed/${prevExp.title.length * 13}/150/100`}
+                        alt={prevExp.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] tracking-[0.18em] text-grey-light uppercase font-medium block mb-1">
+                        ← Previous Project
+                      </span>
+                      <h4 className="font-serif text-lg text-earth-forest truncate group-hover:text-earth-terracotta transition-colors duration-300">
+                        {prevExp.title}
+                      </h4>
+                    </div>
+                  </Link>
+                ) : (
+                  <span className="text-grey-light/60 text-[10px] tracking-[0.18em] uppercase font-medium">First Project</span>
+                )}
+              </div>
+
+              {/* Next Project */}
+              <div className="flex flex-col items-end text-right w-full">
+                {nextExp ? (
+                  <Link
+                    to={`/experience/${nextExp.slug.current}`}
+                    className="group flex items-center justify-end gap-4 w-full text-right"
+                  >
+                    <div className="min-w-0">
+                      <span className="text-[10px] tracking-[0.18em] text-grey-light uppercase font-medium block mb-1">
+                        Next Project →
+                      </span>
+                      <h4 className="font-serif text-lg text-earth-forest truncate group-hover:text-earth-terracotta transition-colors duration-300">
+                        {nextExp.title}
+                      </h4>
+                    </div>
+                    <div className="shrink-0 w-24 h-16 rounded-xl overflow-hidden bg-earth-sand border border-earth-sand shadow-[0_1px_6px_rgba(26,26,26,0.03)]">
+                      <img
+                        src={nextExp.coverImage?.asset
+                          ? urlFor(nextExp.coverImage).width(150).height(100).fit('crop').url()
+                          : `https://picsum.photos/seed/${nextExp.title.length * 13}/150/100`}
+                        alt={nextExp.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      />
+                    </div>
+                  </Link>
+                ) : (
+                  <span className="text-grey-light/60 text-[10px] tracking-[0.18em] uppercase font-medium">Last Project</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Lightbox */}
         {lightboxIndex !== null && galleryImages.length > 0 && (

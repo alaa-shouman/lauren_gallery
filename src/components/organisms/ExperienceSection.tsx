@@ -16,7 +16,7 @@ interface ExperienceTabProps {
 }
 
 function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
-  const imageUrl = exp.coverImage?.asset
+  const imageUrl = exp.coverImage?.asset?._id
     ? urlFor(exp.coverImage).width(300).height(300).fit('crop').url()
     : `https://picsum.photos/seed/${index * 73 + 42}/300/300`
 
