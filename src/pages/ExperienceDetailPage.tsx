@@ -246,29 +246,7 @@ export function ExperienceDetailPage() {
             </button>
 
             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-              {hasSanityPdf ? (
-                <a
-                  href={exp.projectPdf!.asset.url}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full sm:w-auto items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
-                >
-                  <DownloadIcon />
-                  Download PDF
-                </a>
-              ) : (
-                <button
-                  onClick={handleGeneratePdf}
-                  disabled={pdfBusy}
-                  className="flex w-full sm:w-auto items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300 disabled:opacity-50 disabled:cursor-wait"
-                >
-                  <DownloadIcon />
-                  {pdfBusy ? 'Generating…' : 'Download PDF'}
-                </button>
-              )}
-
-              <div className="text-left sm:text-right">
+              <div className="text-left sm:text-right hidden sm:block">
                 <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium leading-none mb-1">
                   {categoryLabel}
                 </p>
@@ -287,13 +265,39 @@ export function ExperienceDetailPage() {
               <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium mb-5">
                 — {categoryLabel}
               </p>
-              <h1
-                className="font-serif leading-tight tracking-[-0.02em] mb-4"
-                style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}
-              >
-                <span className="text-earth-forest">{titleMain} </span>
-                <span className="italic text-earth-terracotta">{titleAccent}</span>
-              </h1>
+              <div className="flex flex-col gap-4 md:gap-6 mb-6">
+                <h1
+                  className="font-serif leading-tight tracking-[-0.02em]"
+                  style={{ fontSize: 'clamp(2.8rem, 5.5vw, 5rem)' }}
+                >
+                  <span className="text-earth-forest">{titleMain} </span>
+                  <span className="italic text-earth-terracotta">{titleAccent}</span>
+                </h1>
+                
+                <div className="shrink-0 flex">
+                  {hasSanityPdf ? (
+                    <a
+                      href={exp.projectPdf!.asset.url}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-fit items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300"
+                    >
+                      <DownloadIcon />
+                      Download PDF
+                    </a>
+                  ) : (
+                    <button
+                      onClick={handleGeneratePdf}
+                      disabled={pdfBusy}
+                      className="inline-flex w-fit items-center justify-center gap-2 border border-earth-forest/20 text-earth-forest text-xs font-medium px-5 py-2.5 rounded-full hover:bg-earth-forest hover:text-earth-cream transition-colors duration-300 disabled:opacity-50 disabled:cursor-wait"
+                    >
+                      <DownloadIcon />
+                      {pdfBusy ? 'Generating…' : 'Download PDF'}
+                    </button>
+                  )}
+                </div>
+              </div>
               {(exp.studio || exp.role) && (
                 <p className="font-serif italic text-grey-mid text-lg mb-8">
                   {[exp.studio, exp.role].filter(Boolean).join(', ')}
