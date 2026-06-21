@@ -4,8 +4,8 @@
 :root {
   /* Core palette — Architectural Minimalism */
   --earth-cream:           #f4f4f2;   /* cool off-white — page ground */
-  --earth-terracotta:      #a89880;   /* desaturated warm stone — helper accent */
-  --earth-terracotta-dark: #8a7d68;   /* darker stone for hover / active states */
+  --earth-terracotta:      #8c9196;   /* cool slate grey — helper accent */
+  --earth-terracotta-dark: #6e7479;   /* darker slate for hover / active states */
   --earth-sage:            #888888;   /* mid grey — decorative / border tint */
   --earth-forest:          #111111;   /* near-black — tier 1: titles, descriptions */
   --earth-sand:            #e4e4e2;   /* light cool grey — card / muted surfaces */

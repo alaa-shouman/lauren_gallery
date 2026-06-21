@@ -15,7 +15,7 @@ export const heroSchema = defineType({
       name: 'headlineItalic',
       title: 'Headline — Italic Line',
       type: 'string',
-      description: 'Middle terracotta italic line, e.g. "and the quiet"',
+      description: 'Middle accent italic line, e.g. "and the quiet"',
     }),
     defineField({
       name: 'headlineSuffix',

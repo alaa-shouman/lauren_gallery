@@ -26,7 +26,7 @@ export interface ProjectPdfProps {
 /* ── Brand palette ─────────────────────────────────────── */
 const COLOR = {
   forest: '#111111',
-  terracotta: '#a89880',
+  terracotta: '#8c9196',
   greyMid: '#555555',
   greyLight: '#999999',
   rule: '#111111',
