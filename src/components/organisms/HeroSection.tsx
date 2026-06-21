@@ -40,7 +40,7 @@ export function HeroSection() {
               style={{ fontSize: 'clamp(3.2rem, 7vw, 6.5rem)' }}
             >
               <span className="block text-earth-forest">{line1}</span>
-              <span className="block italic text-earth-terracotta">{lineItalic}</span>
+              <span className="block italic text-grey-light">{lineItalic}</span>
               <span className="block text-earth-forest">{line3}</span>
             </h1>
 
