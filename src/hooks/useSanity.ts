@@ -6,6 +6,10 @@ export function useSanity<T>(query: string, params?: Record<string, unknown>) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
+  // Stable dependency key so the effect re-runs when params change
+  // (e.g. navigating between projects changes `slug` but not `query`).
+  const paramsKey = JSON.stringify(params ?? {})
+
   useEffect(() => {
     let cancelled = false
     setLoading(true)
@@ -26,7 +30,8 @@ export function useSanity<T>(query: string, params?: Record<string, unknown>) {
     return () => {
       cancelled = true
     }
-  }, [query])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, paramsKey])
 
   return { data, loading, error }
 }

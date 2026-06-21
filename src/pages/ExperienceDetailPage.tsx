@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { experienceBySlugQuery, allExperiencesQuery } from '@/sanity/queries/experience'
@@ -94,6 +94,12 @@ export function ExperienceDetailPage() {
   const navigate = useNavigate()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [pdfBusy, setPdfBusy] = useState(false)
+
+  // Sliding to another project keeps this component mounted — reset scroll
+  // to the top so each project starts at its header, not mid-page.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [slug])
 
   // Animation refs for premium scroll reveal
   const contentRef = useFadeIn<HTMLDivElement>()
