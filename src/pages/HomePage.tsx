@@ -5,8 +5,15 @@ import {
   AboutSection,
   SocialSection,
 } from '@/components/organisms'
+import { useSanity } from '@/hooks/useSanity'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
+import type { SiteSettings } from '@/sanity/types'
 
 export function HomePage() {
+  const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
+  useDocumentMeta(settings?.siteTitle, settings?.metaDescription)
+
   useEffect(() => {
     const target = sessionStorage.getItem('_pendingScroll')
     if (target) {

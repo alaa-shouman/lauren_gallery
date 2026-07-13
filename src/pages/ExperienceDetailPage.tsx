@@ -6,6 +6,7 @@ import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
 import { useFadeIn } from '@/hooks/useFadeIn'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 import type { Experience, SiteSettings } from '@/sanity/types'
 
 
@@ -95,6 +96,13 @@ export function ExperienceDetailPage() {
   const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
   const authorName = settings?.name ?? 'Lauren Khafaji'
   const navigate = useNavigate()
+
+  // Per-project browser-tab title, e.g. "Notting Hill Townhouse — Lauren Al Khafaji…".
+  // Falls back to the global site title until the project loads.
+  const pageTitle = exp?.title
+    ? `${exp.title}${settings?.siteTitle ? ` — ${settings.siteTitle}` : ''}`
+    : settings?.siteTitle
+  useDocumentMeta(pageTitle, settings?.metaDescription)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [pdfBusy, setPdfBusy] = useState(false)
 
