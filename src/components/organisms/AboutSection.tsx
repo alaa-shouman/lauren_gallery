@@ -1,9 +1,10 @@
 import { urlFor } from '@/sanity/lib/image'
 import { useSanity } from '@/hooks/useSanity'
 import { aboutQuery } from '@/sanity/queries/about'
+import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import { PortableTextRenderer } from '@/components/molecules/PortableTextRenderer'
 import { useFadeIn } from '@/hooks/useFadeIn'
-import type { AboutData } from '@/sanity/types'
+import type { AboutData, SiteSettings } from '@/sanity/types'
 
 const FALLBACK_PROCESS_STEPS = [
   { number: '01', title: 'Gather', description: 'Every piece begins with material — clay pulled from the earth, fibres sourced directly from small producers.' },
@@ -15,6 +16,8 @@ const FALLBACK_PROCESS_STEPS = [
 
 export function AboutSection() {
   const { data: about, loading } = useSanity<AboutData>(aboutQuery)
+  const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
+  const name = settings?.name ?? 'Lauren Khafaji'
   const bioRef = useFadeIn<HTMLDivElement>()
   const processRef = useFadeIn<HTMLDivElement>()
   const processSteps = (about?.processSteps && about.processSteps.length > 0)
@@ -39,7 +42,7 @@ export function AboutSection() {
               ) : portraitUrl ? (
                 <img
                   src={portraitUrl}
-                  alt={about?.portrait.alt ?? 'Lauren Khafaji'}
+                  alt={about?.portrait.alt ?? name}
                   className="w-full aspect-3/4 object-cover rounded-2xl shadow-[0_2px_20px_rgba(28,46,36,0.08)]"
                   loading="lazy"
                 />
@@ -56,7 +59,7 @@ export function AboutSection() {
                 {about?.sectionLabel ?? 'the maker'}
               </p>
               <h2 className="font-serif italic text-5xl md:text-6xl text-earth-forest tracking-[-0.02em] leading-[1.1] mb-10">
-                About Lauren Khafaji
+                About {name}
               </h2>
 
               {loading ? (
@@ -78,7 +81,7 @@ export function AboutSection() {
               {about?.signatureImage?.asset && (
                 <img
                   src={urlFor(about.signatureImage).height(80).url()}
-                  alt={about.signatureImage.alt ?? 'Lauren Khafaji signature'}
+                  alt={about.signatureImage.alt ?? `${name} signature`}
                   className="mt-8 h-16 object-contain opacity-60"
                 />
               )}

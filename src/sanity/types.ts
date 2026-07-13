@@ -87,6 +87,7 @@ export interface SocialLink {
 }
 
 export interface SiteSettings {
+  name?: string
   siteTitle: string
   metaDescription: string
   socialLinks: SocialLink[]

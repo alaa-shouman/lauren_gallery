@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useSanity } from '@/hooks/useSanity'
+import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
+import type { SiteSettings } from '@/sanity/types'
 import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
@@ -19,6 +22,8 @@ export function Nav() {
   const location = useLocation()
   const navigate = useNavigate()
   const isHome = location.pathname === '/'
+  const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
+  const name = settings?.name ?? 'Lauren Khafaji'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -82,7 +87,7 @@ export function Nav() {
           onClick={() => isHome && scrollToSection('hero')}
           className="font-serif italic text-earth-forest text-xl tracking-tight hover:text-earth-terracotta transition-colors duration-300"
         >
-          Lauren Khafaji
+          {name}
         </Link>
 
         {/* Desktop nav */}

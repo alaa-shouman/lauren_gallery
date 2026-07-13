@@ -21,6 +21,7 @@ export interface ProjectPdfProps {
   materials?: string[]
   description?: string
   images: PdfGalleryImage[]
+  authorName?: string
 }
 
 /* ── Brand palette ─────────────────────────────────────── */
@@ -262,6 +263,7 @@ export function ProjectPdfDocument(props: ProjectPdfProps) {
   const {
     titleMain, titleAccent, categoryLabel, studio, role,
     year, location, footprint, materials, description, images,
+    authorName = 'Lauren Khafaji',
   } = props
 
   const metaItems: { label: string; value: string }[] = []
@@ -271,7 +273,7 @@ export function ProjectPdfDocument(props: ProjectPdfProps) {
   metaItems.push({ label: 'Photos', value: `${images.length} image${images.length !== 1 ? 's' : ''}` })
 
   const subtitle = [studio, role].filter(Boolean).join(', ')
-  const footerParts = ['Lauren Khafaji', `${titleMain} ${titleAccent}`.trim(), categoryLabel]
+  const footerParts = [authorName, `${titleMain} ${titleAccent}`.trim(), categoryLabel]
   if (year) footerParts.push(String(year))
 
   const Footer = () => (
@@ -294,7 +296,7 @@ export function ProjectPdfDocument(props: ProjectPdfProps) {
   return (
     <Document
       title={`${titleMain} ${titleAccent}`.trim()}
-      author="Lauren Khafaji"
+      author={authorName}
       subject={categoryLabel}
     >
       <Page size="A4" style={styles.page}>

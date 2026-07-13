@@ -6,6 +6,12 @@ export const siteSettingsSchema = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      description: 'Your name as shown in the header, footer, and across the site, e.g. "Lauren Khafaji"',
+    }),
+    defineField({
       name: 'siteTitle',
       title: 'Site Title',
       type: 'string',

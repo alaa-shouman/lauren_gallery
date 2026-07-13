@@ -9,12 +9,13 @@ export function HeroSection() {
   const { data: hero } = useSanity<HeroData>(heroQuery)
   const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
 
+  const name = settings?.name ?? 'Lauren Khafaji'
   const role = settings?.role ?? 'Ceramicist & Textile Artist'
   const location = settings?.location ?? 'Beirut, Lebanon'
   const line1 = hero?.headline ?? 'Clay, cloth,'
   const lineItalic = hero?.headlineItalic ?? 'and the quiet'
   const line3 = hero?.headlineSuffix ?? 'of making.'
-  const bio = hero?.subheadline ?? 'Lauren Khafaji makes handcrafted ceramics, woven textiles, and surface works rooted in natural materials and an honest process.'
+  const bio = hero?.subheadline ?? `${name} makes handcrafted ceramics, woven textiles, and surface works rooted in natural materials and an honest process.`
   const tags = (hero?.tags && hero.tags.length > 0) ? hero.tags : MOCK_TAGS
 
   return (

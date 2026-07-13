@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { experienceBySlugQuery, allExperiencesQuery } from '@/sanity/queries/experience'
+import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
 import { useFadeIn } from '@/hooks/useFadeIn'
-import type { Experience } from '@/sanity/types'
+import type { Experience, SiteSettings } from '@/sanity/types'
 
 
 const PICSUM_SEEDS: Record<string, number[]> = {
@@ -91,6 +92,8 @@ export function ExperienceDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data: exp, loading } = useSanity<Experience>(experienceBySlugQuery, { slug })
   const { data: allExps } = useSanity<Experience[]>(allExperiencesQuery)
+  const { data: settings } = useSanity<SiteSettings>(siteSettingsQuery)
+  const authorName = settings?.name ?? 'Lauren Khafaji'
   const navigate = useNavigate()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [pdfBusy, setPdfBusy] = useState(false)
@@ -186,12 +189,13 @@ export function ExperienceDetailPage() {
           materials={exp.materials}
           description={exp.description}
           images={galleryImages}
+          authorName={authorName}
         />
       ).toBlob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `Lauren-Khafaji-${exp.slug.current}.pdf`
+      a.download = `${authorName.replace(/\s+/g, '-')}-${exp.slug.current}.pdf`
       document.body.appendChild(a)
       a.click()
       a.remove()
@@ -540,7 +544,7 @@ export function ExperienceDetailPage() {
 
         {/* Single-line print footer */}
         <div className="print-footer-line">
-          <span>Lauren Khafaji</span>
+          <span>{authorName}</span>
           <span className="print-footer-dot">·</span>
           <span>{exp.title}</span>
           <span className="print-footer-dot">·</span>
