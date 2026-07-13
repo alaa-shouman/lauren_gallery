@@ -1,0 +1,12 @@
+{
+  "name": "Lauren Al Khafaji — Interior Architecture",
+  "short_name": "Lauren Al Khafaji",
+  "description": "Interior architecture portfolio by Lauren Khafaji — spatial design rooted in material honesty, atmosphere, and the human experience of place.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#1c2e24",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

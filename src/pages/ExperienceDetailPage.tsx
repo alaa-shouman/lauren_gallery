@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { experienceBySlugQuery, allExperiencesQuery } from '@/sanity/queries/experience'
@@ -6,7 +6,8 @@ import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
 import { useFadeIn } from '@/hooks/useFadeIn'
-import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { useSeo, browserSeoOpts } from '@/hooks/useSeo'
+import { experienceSeo } from '@/lib/seo'
 import type { Experience, SiteSettings } from '@/sanity/types'
 
 
@@ -97,12 +98,13 @@ export function ExperienceDetailPage() {
   const authorName = settings?.name ?? 'Lauren Khafaji'
   const navigate = useNavigate()
 
-  // Per-project browser-tab title, e.g. "Notting Hill Townhouse — Lauren Al Khafaji…".
-  // Falls back to the global site title until the project loads.
-  const pageTitle = exp?.title
-    ? `${exp.title}${settings?.siteTitle ? ` — ${settings.siteTitle}` : ''}`
-    : settings?.siteTitle
-  useDocumentMeta(pageTitle, settings?.metaDescription)
+  // Per-project SEO: title, per-project description (exp.description), cover OG
+  // image, canonical, and CreativeWork + BreadcrumbList JSON-LD.
+  const seoMeta = useMemo(
+    () => (exp ? experienceSeo(exp, settings ?? undefined, browserSeoOpts()) : null),
+    [exp, settings],
+  )
+  useSeo(seoMeta, settings?.siteTitle)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [pdfBusy, setPdfBusy] = useState(false)
 

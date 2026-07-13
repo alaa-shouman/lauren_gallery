@@ -90,6 +90,7 @@ export interface SiteSettings {
   name?: string
   siteTitle: string
   metaDescription: string
+  ogImage?: SanityImage
   socialLinks: SocialLink[]
   email: string
   contactNote: string

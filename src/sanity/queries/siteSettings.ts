@@ -5,6 +5,7 @@ export const siteSettingsQuery = groq`
     name,
     siteTitle,
     metaDescription,
+    ogImage { asset->, alt },
     socialLinks,
     email,
     footerTagline,
@@ -12,6 +13,7 @@ export const siteSettingsQuery = groq`
     location,
     whatsapp,
     linkedin,
+    instagram,
     resume { asset-> }
   }
 `

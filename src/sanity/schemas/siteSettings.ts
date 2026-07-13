@@ -25,6 +25,16 @@ export const siteSettingsSchema = defineType({
       description: 'SEO description shown in search results',
     }),
     defineField({
+      name: 'ogImage',
+      title: 'Social Share Image',
+      type: 'image',
+      description: 'Shown when the site is shared on social media (WhatsApp, LinkedIn, etc.) — recommended 1200×630',
+      options: { hotspot: true },
+      fields: [
+        defineField({ name: 'alt', type: 'string', title: 'Alt text' }),
+      ],
+    }),
+    defineField({
       name: 'role',
       title: 'Role / Title',
       type: 'string',
