@@ -72,7 +72,7 @@ export function AboutSection() {
                 <PortableTextRenderer value={about.bio} />
               ) : (
                 <p className="text-earth-forest font-light leading-relaxed">
-                  Lauren Khafaji is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
+                  {name} is a maker working with clay, fibre, and surface. Her studio practice spans ceramics, hand-woven textiles, and material-led surface design — each discipline informing the others.
                   <br /><br />
                   Based in the hills, she draws from the quiet rhythms of nature: the texture of bark, the weight of river stones, the way light falls through linen. Her work is an invitation to slow down and notice.
                 </p>
