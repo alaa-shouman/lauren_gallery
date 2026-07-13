@@ -38,6 +38,27 @@ export interface ExperienceCategory {
   accentLabel: string
   slug: string
   order: number
+  hasCompany?: boolean
+}
+
+export interface Company {
+  _id: string
+  name: string
+  slug: string
+  order?: number
+  description?: string
+  logo?: SanityImage
+  /** Present on the list query; the owning category's _id. */
+  categoryId?: string
+}
+
+/** The company reference as embedded on an Experience document. */
+export interface ExperienceCompany {
+  _id: string
+  name: string
+  slug: string
+  order?: number
+  logo?: SanityImage
 }
 
 export interface Experience {
@@ -52,6 +73,7 @@ export interface Experience {
   footprint?: string
   materials?: string[]
   category: ExperienceCategory
+  company?: ExperienceCompany
   order?: number
   coverImage?: SanityImage
   gallery?: SanityImage[]
@@ -75,5 +97,6 @@ export interface SiteSettings {
   location?: string
   whatsapp?: string
   linkedin?: string
+  instagram?: string
   resume?: { asset: { url: string } }
 }

@@ -6,6 +6,7 @@ export const allCategoriesQuery = groq`
     label,
     accentLabel,
     "slug": slug.current,
-    order
+    order,
+    hasCompany
   }
 `

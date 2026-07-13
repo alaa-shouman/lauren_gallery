@@ -16,6 +16,12 @@ export const allExperiencesQuery = groq`
       "slug": slug.current,
       order
     },
+    "company": company-> {
+      _id,
+      name,
+      "slug": slug.current,
+      order
+    },
     order,
     externalUrl,
     coverImage { asset->, alt },
@@ -41,6 +47,13 @@ export const experienceBySlugQuery = groq`
       accentLabel,
       "slug": slug.current,
       order
+    },
+    "company": company-> {
+      _id,
+      name,
+      "slug": slug.current,
+      order,
+      logo { asset->, alt }
     },
     externalUrl,
     coverImage { asset->, alt },

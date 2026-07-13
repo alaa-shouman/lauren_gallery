@@ -49,6 +49,38 @@ export const experienceSchema = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'company',
+      title: 'Company',
+      type: 'reference',
+      to: [{ type: 'company' }],
+      description: 'Only used when the selected category has "Group by company" enabled. Projects without a company appear under an "Other projects" group.',
+      options: {
+        // Only offer companies that belong to the project's selected category.
+        filter: ({ document }) => {
+          const categoryRef = (document?.category as { _ref?: string } | undefined)?._ref
+          if (!categoryRef) return { filter: 'false' }
+          return {
+            filter: 'category._ref == $categoryRef',
+            params: { categoryRef },
+          }
+        },
+      },
+      validation: (r) =>
+        r.custom(async (value, context) => {
+          const categoryRef = (context.document?.category as { _ref?: string } | undefined)?._ref
+          if (!categoryRef) return true
+          const client = context.getClient({ apiVersion: '2024-01-01' })
+          const hasCompany = await client.fetch<boolean>(
+            '*[_id == $id][0].hasCompany',
+            { id: categoryRef },
+          )
+          if (hasCompany && !value) {
+            return 'This category groups projects by company — please assign a company (or leave it for the "Other projects" group).'
+          }
+          return true
+        }).warning(),
+    }),
+    defineField({
       name: 'order',
       title: 'Order',
       type: 'number',

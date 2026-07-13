@@ -35,6 +35,13 @@ export const experienceCategorySchema = defineType({
       initialValue: 10,
       validation: (r) => r.required(),
     }),
+    defineField({
+      name: 'hasCompany',
+      title: 'Group by company',
+      type: 'boolean',
+      description: 'When on, this category shows companies first; selecting one reveals its projects.',
+      initialValue: false,
+    }),
   ],
   orderings: [
     {

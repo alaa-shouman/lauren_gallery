@@ -3,14 +3,45 @@ import { useNavigate } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { allExperiencesQuery } from '@/sanity/queries/experience'
 import { allCategoriesQuery } from '@/sanity/queries/experienceCategory'
+import { allCompaniesQuery } from '@/sanity/queries/company'
 import { urlFor } from '@/sanity/lib/image'
 import { cn } from '@/lib/utils'
-import type { Experience, ExperienceCategory } from '@/sanity/types'
+import type { Experience, ExperienceCategory, Company } from '@/sanity/types'
+
+type ExperienceWithCount = Experience & { galleryCount?: number }
+
+// A group of projects shown under a company row inside a company-based category.
+// `id` is the company `_id`, or `__other__:<categoryId>` for the unassigned bucket.
+interface CompanyGroup {
+  id: string
+  name: string
+  logo?: Company['logo']
+  items: ExperienceWithCount[]
+}
+
+function yearRange(items: ExperienceWithCount[]): string | null {
+  const years = items.map((e) => e.year).filter((y): y is number => typeof y === 'number')
+  if (years.length === 0) return null
+  const min = Math.min(...years)
+  const max = Math.max(...years)
+  return min === max ? String(min) : `${min} — ${max}`
+}
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={cn('w-4 h-4 transition-transform duration-300', open && 'rotate-180')}
+      fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+    </svg>
+  )
+}
 
 // ─── ExperienceTab ─────────────────────────────────────────────────────────────
 
 interface ExperienceTabProps {
-  exp: Experience & { galleryCount?: number }
+  exp: ExperienceWithCount
   index: number
   onClick: () => void
 }
@@ -75,23 +106,106 @@ function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
   )
 }
 
-// ─── CategoryAccordion ─────────────────────────────────────────────────────────
+// ─── CompanyAccordion (nested level, company-based categories only) ─────────────
 
-interface CategoryAccordionProps {
-  cat: ExperienceCategory
-  index: number
-  items: (Experience & { galleryCount?: number })[]
+interface CompanyAccordionProps {
+  group: CompanyGroup
   isOpen: boolean
   onToggle: () => void
   onSelectExp: (exp: Experience) => void
 }
 
-function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }: CategoryAccordionProps) {
+function CompanyAccordion({ group, isOpen, onToggle, onSelectExp }: CompanyAccordionProps) {
+  const dateRange = yearRange(group.items)
+  const logoUrl = group.logo?.asset?._id
+    ? urlFor(group.logo).width(96).height(96).fit('crop').url()
+    : null
+
+  return (
+    <div className="border border-earth-sand/70 rounded-xl overflow-hidden bg-white">
+      {/* Company header */}
+      <button
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className={cn(
+          'w-full flex items-center justify-between gap-4 px-4 md:px-5 py-4 transition-colors duration-200',
+          isOpen ? 'bg-earth-warm' : 'hover:bg-earth-warm/60'
+        )}
+      >
+        <div className="flex items-center gap-4 min-w-0 text-left">
+          {/* Logo or monogram */}
+          <span className="shrink-0 w-10 h-10 rounded-lg overflow-hidden bg-earth-sand flex items-center justify-center">
+            {logoUrl ? (
+              <img src={logoUrl} alt={group.logo?.alt ?? group.name} className="w-full h-full object-cover" loading="lazy" />
+            ) : (
+              <span className="font-serif text-earth-forest text-base">{group.name.charAt(0)}</span>
+            )}
+          </span>
+          <div className="min-w-0">
+            <h4 className="font-serif text-lg md:text-xl text-earth-forest leading-tight truncate">
+              {group.name}
+            </h4>
+            <p className="text-xs text-grey-light">
+              {group.items.length} {group.items.length === 1 ? 'project' : 'projects'}
+              {dateRange && ` · ${dateRange}`}
+            </p>
+          </div>
+        </div>
+
+        <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full border border-earth-forest/20 text-earth-forest transition-all duration-300">
+          <Chevron open={isOpen} />
+        </span>
+      </button>
+
+      {/* Company body — projects */}
+      <div className={cn(
+        'grid transition-all duration-500 ease-in-out',
+        isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+      )}>
+        <div className="overflow-hidden min-h-0">
+          <div className="p-3 md:p-4 space-y-3 bg-earth-cream/60">
+            {group.items.map((exp, i) => (
+              <ExperienceTab
+                key={exp._id}
+                exp={exp}
+                index={i}
+                onClick={() => onSelectExp(exp)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── CategoryAccordion ─────────────────────────────────────────────────────────
+
+interface CategoryAccordionProps {
+  cat: ExperienceCategory
+  index: number
+  items: ExperienceWithCount[]           // flat list — used for non-company categories
+  companyGroups?: CompanyGroup[]         // present only for company-based categories
+  isOpen: boolean
+  onToggle: () => void
+  openCompanies: Set<string>
+  onToggleCompany: (id: string) => void
+  onSelectExp: (exp: Experience) => void
+}
+
+function CategoryAccordion({
+  cat, index, items, companyGroups, isOpen, onToggle, openCompanies, onToggleCompany, onSelectExp,
+}: CategoryAccordionProps) {
   const displayIndex = String(index + 1).padStart(2, '0')
 
-  const dateRange = items.length > 0
-    ? `${Math.min(...items.map(e => e.year ?? 9999))} — ${Math.max(...items.map(e => e.year ?? 0))}`
-    : null
+  const useCompanies = Boolean(cat.hasCompany && companyGroups)
+  const allItems = useCompanies ? companyGroups!.flatMap((g) => g.items) : items
+  const dateRange = yearRange(allItems)
+
+  const count = useCompanies ? companyGroups!.length : items.length
+  const countLabel = useCompanies
+    ? `${count} ${count === 1 ? 'company' : 'companies'}`
+    : `${count} ${count === 1 ? 'project' : 'projects'}`
 
   return (
     <div className="border border-earth-sand rounded-2xl overflow-hidden">
@@ -122,7 +236,7 @@ function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }:
             'hidden md:block text-xs tracking-wide transition-colors duration-200',
             isOpen ? 'text-earth-cream/40' : 'text-grey-light'
           )}>
-            {items.length} {items.length === 1 ? 'project' : 'projects'}
+            {countLabel}
             {dateRange && ` · ${dateRange}`}
           </span>
 
@@ -133,30 +247,37 @@ function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }:
               ? 'border-earth-cream/20 text-earth-cream'
               : 'border-earth-forest/20 text-earth-forest'
           )}>
-            <svg
-              className={cn('w-4 h-4 transition-transform duration-300', isOpen && 'rotate-180')}
-              fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-            </svg>
+            <Chevron open={isOpen} />
           </span>
         </div>
       </button>
 
       {/* Accordion body */}
       <div className={cn(
-        'overflow-hidden transition-all duration-500 ease-in-out',
-        isOpen ? 'max-h-500 opacity-100' : 'max-h-0 opacity-0'
+        'grid transition-all duration-500 ease-in-out',
+        isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
       )}>
-        <div className="p-4 md:p-5 space-y-3 bg-earth-cream/60">
-          {items.map((exp, i) => (
-            <ExperienceTab
-              key={exp._id}
-              exp={exp}
-              index={i}
-              onClick={() => onSelectExp(exp)}
-            />
-          ))}
+        <div className="overflow-hidden min-h-0">
+          <div className="p-4 md:p-5 space-y-3 bg-earth-cream/60">
+            {useCompanies
+              ? companyGroups!.map((group) => (
+                  <CompanyAccordion
+                    key={group.id}
+                    group={group}
+                    isOpen={openCompanies.has(group.id)}
+                    onToggle={() => onToggleCompany(group.id)}
+                    onSelectExp={onSelectExp}
+                  />
+                ))
+              : items.map((exp, i) => (
+                  <ExperienceTab
+                    key={exp._id}
+                    exp={exp}
+                    index={i}
+                    onClick={() => onSelectExp(exp)}
+                  />
+                ))}
+          </div>
         </div>
       </div>
     </div>
@@ -166,15 +287,17 @@ function CategoryAccordion({ cat, index, items, isOpen, onToggle, onSelectExp }:
 // ─── ExperienceSection ─────────────────────────────────────────────────────────
 
 export function ExperienceSection() {
-  const { data: fetchedExperiences, loading: loadingExp } = useSanity<(Experience & { galleryCount: number })[]>(allExperiencesQuery)
+  const { data: fetchedExperiences, loading: loadingExp } = useSanity<ExperienceWithCount[]>(allExperiencesQuery)
   const { data: fetchedCategories, loading: loadingCat } = useSanity<ExperienceCategory[]>(allCategoriesQuery)
+  const { data: fetchedCompanies, loading: loadingCo } = useSanity<Company[]>(allCompaniesQuery)
 
-  const loading = loadingExp || loadingCat
+  const loading = loadingExp || loadingCat || loadingCo
 
   const categories = fetchedCategories ?? []
 
   const navigate = useNavigate()
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
+  const [openCompanies, setOpenCompanies] = useState<Set<string>>(new Set())
 
   function toggleCategory(id: string) {
     setOpenCategories((prev) => {
@@ -185,10 +308,19 @@ export function ExperienceSection() {
     })
   }
 
-  // Group experiences by category _id
+  function toggleCompany(id: string) {
+    setOpenCompanies((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  // Group experiences by category _id (used for non-company categories).
   const grouped = useMemo(() => {
     const list = fetchedExperiences ?? []
-    const g: Record<string, typeof list> = {}
+    const g: Record<string, ExperienceWithCount[]> = {}
     for (const exp of list) {
       if (!exp.category?._id) continue
       if (!g[exp.category._id]) g[exp.category._id] = []
@@ -196,6 +328,36 @@ export function ExperienceSection() {
     }
     return g
   }, [fetchedExperiences])
+
+  // For company-based categories, build the ordered list of company groups,
+  // plus an "Other projects" bucket for projects with no company assigned.
+  const companyGroupsByCategory = useMemo(() => {
+    const cats = fetchedCategories ?? []
+    const cos = fetchedCompanies ?? []
+    const exps = fetchedExperiences ?? []
+    const result: Record<string, CompanyGroup[]> = {}
+
+    for (const cat of cats) {
+      if (!cat.hasCompany) continue
+      const catExps = exps.filter((e) => e.category?._id === cat._id)
+      const catCompanies = cos.filter((c) => c.categoryId === cat._id) // already ordered by query
+
+      const groups: CompanyGroup[] = []
+      for (const co of catCompanies) {
+        const items = catExps.filter((e) => e.company?._id === co._id)
+        if (items.length === 0) continue // hide empty companies
+        groups.push({ id: co._id, name: co.name, logo: co.logo, items })
+      }
+
+      const orphans = catExps.filter((e) => !e.company?._id)
+      if (orphans.length > 0) {
+        groups.push({ id: `__other__:${cat._id}`, name: 'Other projects', items: orphans })
+      }
+
+      result[cat._id] = groups
+    }
+    return result
+  }, [fetchedCategories, fetchedCompanies, fetchedExperiences])
 
   function handleSelectExp(exp: Experience) {
     navigate(`/experience/${exp.slug.current}`)
@@ -226,20 +388,20 @@ export function ExperienceSection() {
           </div>
         ) : (
           <div className="space-y-4">
-            {(categories ?? []).map((cat, i) => {
-              const items = grouped[cat._id] ?? []
-              return (
-                <CategoryAccordion
-                  key={cat._id}
-                  cat={cat}
-                  index={i}
-                  items={items}
-                  isOpen={openCategories.has(cat._id)}
-                  onToggle={() => toggleCategory(cat._id)}
-                  onSelectExp={handleSelectExp}
-                />
-              )
-            })}
+            {categories.map((cat, i) => (
+              <CategoryAccordion
+                key={cat._id}
+                cat={cat}
+                index={i}
+                items={grouped[cat._id] ?? []}
+                companyGroups={cat.hasCompany ? (companyGroupsByCategory[cat._id] ?? []) : undefined}
+                isOpen={openCategories.has(cat._id)}
+                onToggle={() => toggleCategory(cat._id)}
+                openCompanies={openCompanies}
+                onToggleCompany={toggleCompany}
+                onSelectExp={handleSelectExp}
+              />
+            ))}
           </div>
         )}
       </div>

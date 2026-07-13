@@ -152,6 +152,9 @@ export function ExperienceDetailPage() {
   const categoryLabel = exp?.category
     ? `${exp.category.label} ${exp.category.accentLabel}`.trim()
     : ''
+  const companyLogoUrl = exp?.company?.logo?.asset?._id
+    ? urlFor(exp.company.logo).width(72).height(72).fit('crop').url()
+    : null
   const hasSanityPdf = Boolean(exp?.projectPdf?.asset?.url)
 
   async function handleGeneratePdf() {
@@ -271,6 +274,16 @@ export function ExperienceDetailPage() {
               <p className="text-[10px] tracking-[0.18em] text-earth-terracotta uppercase font-medium mb-5">
                 — {categoryLabel}
               </p>
+              {exp.company && (
+                <div className="flex items-center gap-3 mb-5 -mt-2">
+                  {companyLogoUrl && (
+                    <span className="shrink-0 w-9 h-9 rounded-lg overflow-hidden bg-earth-sand flex items-center justify-center">
+                      <img src={companyLogoUrl} alt={exp.company.logo?.alt ?? exp.company.name} className="w-full h-full object-cover" />
+                    </span>
+                  )}
+                  <span className="font-serif text-lg text-earth-forest">{exp.company.name}</span>
+                </div>
+              )}
               <div className="flex flex-col gap-4 md:gap-6 mb-6">
                 <h1
                   className="font-serif leading-tight tracking-[-0.02em]"
@@ -458,7 +471,7 @@ export function ExperienceDetailPage() {
         {/* Project header */}
         <div className="print-header">
           <p className="print-eyebrow">
-            {[categoryLabel, exp.studio, exp.year, exp.location].filter(Boolean).join(' · ')}
+            {[categoryLabel, exp.company?.name, exp.studio, exp.year, exp.location].filter(Boolean).join(' · ')}
           </p>
           <h1 className="print-title">
             {titleMain && <span>{titleMain} </span>}

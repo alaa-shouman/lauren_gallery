@@ -48,6 +48,12 @@ export const siteSettingsSchema = defineType({
       description: 'Full URL or just the handle, e.g. "lauren-khafaji"',
     }),
     defineField({
+      name: 'instagram',
+      title: 'Instagram Profile URL or Handle',
+      type: 'string',
+      description: 'Full URL or just the handle, e.g. "laurenkhafaji"',
+    }),
+    defineField({
       name: 'resume',
       title: 'Resume / CV File',
       type: 'file',
