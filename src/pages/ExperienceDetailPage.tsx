@@ -52,10 +52,11 @@ function GalleryImage({ src, lqip, aspectRatio, alt, caption, index, total, onCl
   index: number; total: number; onClick: () => void
 }) {
   return (
-    <figure className="group break-inside-avoid mb-3 md:mb-4">
+    <figure className="group max-w-full">
+      {/* Fixed row height + aspect-ratio box = natural width, zero cropping */}
       <button
         onClick={onClick}
-        className="relative overflow-hidden rounded-xl block w-full"
+        className="relative overflow-hidden rounded-xl block h-44 md:h-64 lg:h-72 max-w-full"
         aria-label={`View image ${index + 1} of ${total} fullscreen`}
       >
         <ProgressiveImage
@@ -63,11 +64,12 @@ function GalleryImage({ src, lqip, aspectRatio, alt, caption, index, total, onCl
           alt={alt}
           lqip={lqip}
           aspectRatio={aspectRatio ?? 4 / 3}
-          className="transition-transform duration-500 group-hover:scale-[1.02]"
+          className="h-full max-w-full transition-transform duration-500 group-hover:scale-[1.02]"
         />
       </button>
       {/* Editorial label — figure index + optional caption, always visible */}
-      <figcaption className="mt-2.5 flex gap-2.5">
+      {/* w-0 min-w-full: caption matches the image width instead of widening the figure */}
+      <figcaption className="mt-2.5 flex gap-2.5 w-0 min-w-full">
         <span className="shrink-0 pt-px text-[10px] font-mono tracking-[0.15em] text-grey-light tabular-nums">
           {String(index + 1).padStart(2, '0')}
         </span>
@@ -395,8 +397,8 @@ export function ExperienceDetailPage() {
                   {galleryImages.length} image{galleryImages.length !== 1 ? 's' : ''} · tap to enlarge
                 </span>
               </div>
-              {/* CSS-columns masonry — each photo keeps its natural aspect ratio */}
-              <div className="columns-2 md:columns-3 gap-3 md:gap-4">
+              {/* Uniform-height rows — same height per row, natural widths, centered */}
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4">
                 {galleryImages.map((img, i) => (
                   <GalleryImage
                     key={i}
