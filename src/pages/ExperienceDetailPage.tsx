@@ -80,18 +80,19 @@ function GalleryImage({ src, lqip, aspectRatio, alt, caption, index, total, onCl
 }) {
   return (
     <figure className="group max-w-full">
-      {/* Fixed row height + aspect-ratio box = natural width, zero cropping */}
+      {/* Fixed row height + aspect-ratio on the SAME element — Safari can't
+          resolve the ratio against a percentage height on a child. */}
       <button
         onClick={onClick}
         className="relative overflow-hidden rounded-xl block h-44 md:h-64 lg:h-72 max-w-full"
+        style={{ aspectRatio: aspectRatio ?? 4 / 3 }}
         aria-label={`View image ${index + 1} of ${total} fullscreen`}
       >
         <ProgressiveImage
           src={src}
           alt={alt}
           lqip={lqip}
-          aspectRatio={aspectRatio ?? 4 / 3}
-          className="h-full max-w-full transition-transform duration-500 group-hover:scale-[1.02]"
+          className="w-full h-full transition-transform duration-500 group-hover:scale-[1.02]"
         />
       </button>
       {/* Editorial label — figure index + optional caption, always visible */}
@@ -116,6 +117,7 @@ function GalleryPdfTile({ item, index, onClick }: { item: GalleryPdfItem; index:
       <button
         onClick={onClick}
         className="relative overflow-hidden rounded-xl block h-44 md:h-64 lg:h-72 max-w-full"
+        style={{ aspectRatio: item.aspectRatio ?? 3 / 4 }}
         aria-label={`Open PDF document: ${item.title}`}
       >
         {item.src ? (
@@ -123,11 +125,10 @@ function GalleryPdfTile({ item, index, onClick }: { item: GalleryPdfItem; index:
             src={item.src}
             alt={item.title}
             lqip={item.lqip}
-            aspectRatio={item.aspectRatio ?? 3 / 4}
-            className="h-full max-w-full transition-transform duration-500 group-hover:scale-[1.02]"
+            className="w-full h-full transition-transform duration-500 group-hover:scale-[1.02]"
           />
         ) : (
-          <span className="flex h-full aspect-[3/4] flex-col items-center justify-center gap-3 bg-white border border-earth-sand px-4">
+          <span className="flex w-full h-full flex-col items-center justify-center gap-3 bg-white border border-earth-sand px-4">
             <svg className="w-8 h-8 text-earth-terracotta" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8m-5-5l5 5m-5-5v5h5M9 13h6M9 17h6" />
             </svg>
