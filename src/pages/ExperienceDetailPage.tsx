@@ -6,6 +6,8 @@ import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
 import { ProgressiveImage } from '@/components/molecules/ProgressiveImage'
+import { PdfViewer } from '@/components/molecules/PdfViewer'
+import { isGalleryDocument } from '@/sanity/types'
 import { useFadeIn } from '@/hooks/useFadeIn'
 import { useSeo, browserSeoOpts } from '@/hooks/useSeo'
 import { experienceSeo } from '@/lib/seo'
@@ -29,6 +31,31 @@ function getPicsumUrl(slug: string, index: number, w = 900, h = 700): string {
   const seed = seeds ? seeds[index % seeds.length] : index * 73 + 42
   return `https://picsum.photos/seed/${seed}/${w}/${h}`
 }
+
+interface GalleryImageItem {
+  kind: 'image'
+  src: string
+  fullSrc: string
+  alt: string
+  caption?: string
+  lqip?: string
+  aspectRatio?: number
+  /** Position within the images-only list, used by the lightbox. */
+  lightboxIndex: number
+}
+
+interface GalleryPdfItem {
+  kind: 'pdf'
+  title: string
+  fileUrl: string
+  caption?: string
+  /** Optional preview tile image (from the Studio's preview field). */
+  src?: string
+  lqip?: string
+  aspectRatio?: number
+}
+
+type GalleryItem = GalleryImageItem | GalleryPdfItem
 
 function splitTitle(title: string): [string, string] {
   const lastSpace = title.lastIndexOf(' ')
@@ -83,6 +110,48 @@ function GalleryImage({ src, lqip, aspectRatio, alt, caption, index, total, onCl
   )
 }
 
+function GalleryPdfTile({ item, index, onClick }: { item: GalleryPdfItem; index: number; onClick: () => void }) {
+  return (
+    <figure className="group max-w-full">
+      <button
+        onClick={onClick}
+        className="relative overflow-hidden rounded-xl block h-44 md:h-64 lg:h-72 max-w-full"
+        aria-label={`Open PDF document: ${item.title}`}
+      >
+        {item.src ? (
+          <ProgressiveImage
+            src={item.src}
+            alt={item.title}
+            lqip={item.lqip}
+            aspectRatio={item.aspectRatio ?? 3 / 4}
+            className="h-full max-w-full transition-transform duration-500 group-hover:scale-[1.02]"
+          />
+        ) : (
+          <span className="flex h-full aspect-[3/4] flex-col items-center justify-center gap-3 bg-white border border-earth-sand px-4">
+            <svg className="w-8 h-8 text-earth-terracotta" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8m-5-5l5 5m-5-5v5h5M9 13h6M9 17h6" />
+            </svg>
+            <span className="font-serif italic text-earth-forest text-base text-center leading-snug line-clamp-3">
+              {item.title}
+            </span>
+          </span>
+        )}
+        <span className="absolute top-2 right-2 rounded-full bg-earth-forest/80 text-earth-cream text-[9px] font-medium tracking-[0.15em] uppercase px-2.5 py-1">
+          PDF
+        </span>
+      </button>
+      <figcaption className="mt-2.5 flex gap-2.5 w-0 min-w-full">
+        <span className="shrink-0 pt-px text-[10px] font-mono tracking-[0.15em] text-grey-light tabular-nums">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="text-xs text-grey-mid font-light leading-snug line-clamp-2">
+          {item.caption ?? item.title}
+        </span>
+      </figcaption>
+    </figure>
+  )
+}
+
 /* ── Icons ──────────────────────────────────────────────────────────────────── */
 
 function DownloadIcon() {
@@ -112,6 +181,16 @@ export function ExperienceDetailPage() {
   useSeo(seoMeta, settings?.siteTitle)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [pdfBusy, setPdfBusy] = useState(false)
+  const [pdfDoc, setPdfDoc] = useState<GalleryPdfItem | null>(null)
+
+  function openPdf(doc: GalleryPdfItem) {
+    // Inline PDF embedding is unreliable on touch devices — open natively there.
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      window.open(doc.fileUrl, '_blank', 'noopener')
+    } else {
+      setPdfDoc(doc)
+    }
+  }
 
   // Sliding to another project keeps this component mounted — reset scroll
   // to the top so each project starts at its header, not mid-page.
@@ -133,38 +212,59 @@ export function ExperienceDetailPage() {
     }
   }
 
-  const galleryImages: {
-    src: string; fullSrc: string; alt: string; caption?: string; lqip?: string; aspectRatio?: number
-  }[] = (() => {
+  const galleryItems: GalleryItem[] = (() => {
     if (!slug) return []
-    const sanityImages = exp?.gallery?.filter((img) => img?.asset) ?? []
+    const entries = exp?.gallery ?? []
+    let lightboxIndex = 0
+    const items: GalleryItem[] = []
 
-    if (sanityImages.length > 0) {
-      // fit('max') = resize within the given width, never crop, never upscale
-      // beyond the uploaded original — photos keep their native aspect ratio.
-      return sanityImages.map((si, i) => {
-        const dims = si.asset.metadata?.dimensions
-        return {
-          src: urlFor(si).width(1400).fit('max').auto('format').quality(85).url(),
-          fullSrc: urlFor(si).width(2560).fit('max').auto('format').quality(90).url(),
-          alt: si.alt ?? `${exp?.title ?? 'Project'} — image ${i + 1}`,
-          caption: si.caption,
-          lqip: si.asset.metadata?.lqip,
+    for (const entry of entries) {
+      if (isGalleryDocument(entry)) {
+        if (!entry.fileUrl) continue
+        const preview = entry.preview?.asset ? entry.preview : undefined
+        const dims = preview?.asset.metadata?.dimensions
+        items.push({
+          kind: 'pdf',
+          title: entry.title,
+          fileUrl: entry.fileUrl,
+          caption: entry.caption,
+          src: preview ? urlFor(preview).width(1400).fit('max').auto('format').quality(85).url() : undefined,
+          lqip: preview?.asset.metadata?.lqip,
           aspectRatio: dims ? dims.width / dims.height : undefined,
-        }
-      })
-    } else {
-      const seeds = PICSUM_SEEDS[slug] ?? []
-      const count = Math.max(seeds.length, 6)
-      return Array.from({ length: count }).map((_, i) => ({
-        src: getPicsumUrl(slug, i),
-        fullSrc: getPicsumUrl(slug, i, 1800, 1400),
-        alt: `${exp?.title ?? 'Project'} — image ${i + 1}`,
-        caption: undefined,
-        aspectRatio: 900 / 700,
-      }))
+        })
+      } else if (entry.asset) {
+        // fit('max') = resize within the given width, never crop, never upscale
+        // beyond the uploaded original — photos keep their native aspect ratio.
+        const dims = entry.asset.metadata?.dimensions
+        items.push({
+          kind: 'image',
+          src: urlFor(entry).width(1400).fit('max').auto('format').quality(85).url(),
+          fullSrc: urlFor(entry).width(2560).fit('max').auto('format').quality(90).url(),
+          alt: entry.alt ?? `${exp?.title ?? 'Project'} — image ${lightboxIndex + 1}`,
+          caption: entry.caption,
+          lqip: entry.asset.metadata?.lqip,
+          aspectRatio: dims ? dims.width / dims.height : undefined,
+          lightboxIndex: lightboxIndex++,
+        })
+      }
     }
+
+    if (items.length > 0) return items
+
+    const seeds = PICSUM_SEEDS[slug] ?? []
+    const count = Math.max(seeds.length, 6)
+    return Array.from({ length: count }).map((_, i): GalleryImageItem => ({
+      kind: 'image',
+      src: getPicsumUrl(slug, i),
+      fullSrc: getPicsumUrl(slug, i, 1800, 1400),
+      alt: `${exp?.title ?? 'Project'} — image ${i + 1}`,
+      caption: undefined,
+      aspectRatio: 900 / 700,
+      lightboxIndex: i,
+    }))
   })()
+
+  const galleryImages = galleryItems.filter((it): it is GalleryImageItem => it.kind === 'image')
 
 
   // Find next/prev projects based on all experiences list
@@ -386,7 +486,7 @@ export function ExperienceDetailPage() {
         </div>
 
         {/* Gallery */}
-        {galleryImages.length > 0 && (
+        {galleryItems.length > 0 && (
           <div ref={galleryRef} className="fade-up border-t border-earth-sand mt-4">
             <div className="mx-auto max-w-280 px-6 pt-12 pb-20">
               <div className="flex items-baseline justify-between mb-8">
@@ -394,24 +494,33 @@ export function ExperienceDetailPage() {
                   Project <span className="italic text-earth-terracotta">gallery</span>
                 </h2>
                 <span className="text-[10px] tracking-[0.18em] text-grey-light uppercase hidden md:block">
-                  {galleryImages.length} image{galleryImages.length !== 1 ? 's' : ''} · tap to enlarge
+                  {[
+                    `${galleryImages.length} image${galleryImages.length !== 1 ? 's' : ''}`,
+                    galleryItems.length > galleryImages.length
+                      ? `${galleryItems.length - galleryImages.length} pdf${galleryItems.length - galleryImages.length !== 1 ? 's' : ''}`
+                      : null,
+                  ].filter(Boolean).join(' · ')} · tap to enlarge
                 </span>
               </div>
               {/* Uniform-height rows — same height per row, natural widths, centered */}
               <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-                {galleryImages.map((img, i) => (
-                  <GalleryImage
-                    key={i}
-                    src={img.src}
-                    lqip={img.lqip}
-                    aspectRatio={img.aspectRatio}
-                    alt={img.alt}
-                    caption={img.caption}
-                    index={i}
-                    total={galleryImages.length}
-                    onClick={() => setLightboxIndex(i)}
-                  />
-                ))}
+                {galleryItems.map((item, i) =>
+                  item.kind === 'image' ? (
+                    <GalleryImage
+                      key={i}
+                      src={item.src}
+                      lqip={item.lqip}
+                      aspectRatio={item.aspectRatio}
+                      alt={item.alt}
+                      caption={item.caption}
+                      index={i}
+                      total={galleryItems.length}
+                      onClick={() => setLightboxIndex(item.lightboxIndex)}
+                    />
+                  ) : (
+                    <GalleryPdfTile key={i} item={item} index={i} onClick={() => openPdf(item)} />
+                  ),
+                )}
               </div>
             </div>
           </div>
@@ -493,6 +602,11 @@ export function ExperienceDetailPage() {
             onPrev={prevImage}
             onNext={nextImage}
           />
+        )}
+
+        {/* PDF viewer overlay */}
+        {pdfDoc && (
+          <PdfViewer url={pdfDoc.fileUrl} title={pdfDoc.title} onClose={() => setPdfDoc(null)} />
         )}
       </div>
 

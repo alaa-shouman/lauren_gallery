@@ -1,4 +1,5 @@
 export interface SanityImage {
+  _type?: 'image'
   asset: {
     _id: string
     url: string
@@ -10,6 +11,21 @@ export interface SanityImage {
   }
   alt?: string
   caption?: string
+}
+
+/** A PDF entry inside an experience gallery. */
+export interface GalleryDocument {
+  _type: 'galleryDocument'
+  title: string
+  fileUrl: string
+  preview?: SanityImage
+  caption?: string
+}
+
+export type GalleryEntry = SanityImage | GalleryDocument
+
+export function isGalleryDocument(entry: GalleryEntry): entry is GalleryDocument {
+  return entry._type === 'galleryDocument'
 }
 
 export interface HeroData {
@@ -78,7 +94,7 @@ export interface Experience {
   company?: ExperienceCompany
   order?: number
   coverImage?: SanityImage
-  gallery?: SanityImage[]
+  gallery?: GalleryEntry[]
   externalUrl?: string
   projectPdf?: { asset: { url: string } }
 }

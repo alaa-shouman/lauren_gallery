@@ -57,7 +57,16 @@ export const experienceBySlugQuery = groq`
     },
     externalUrl,
     coverImage { asset->, alt },
-    gallery[] { asset->, alt, caption },
+    gallery[] {
+      _type,
+      _type == "image" => { asset->, alt, caption },
+      _type == "galleryDocument" => {
+        title,
+        caption,
+        "fileUrl": file.asset->url,
+        preview { asset->, alt }
+      }
+    },
     projectPdf { asset-> }
   }
 `

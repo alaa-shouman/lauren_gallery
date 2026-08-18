@@ -115,6 +115,46 @@ export const experienceSchema = defineType({
             }),
           ],
         },
+        {
+          type: 'object',
+          name: 'galleryDocument',
+          title: 'PDF document',
+          fields: [
+            defineField({
+              name: 'title',
+              type: 'string',
+              title: 'Title',
+              description: 'Shown on the tile and in the viewer, e.g. "Floor plans"',
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: 'file',
+              type: 'file',
+              title: 'PDF file',
+              options: { accept: 'application/pdf' },
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: 'preview',
+              type: 'image',
+              title: 'Preview image (optional)',
+              description: 'A JPEG/PNG of the cover page, shown as the gallery tile. Without it a generic document tile is shown.',
+              options: { hotspot: true },
+            }),
+            defineField({
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+              description: 'Optional caption shown below the tile',
+            }),
+          ],
+          preview: {
+            select: { title: 'title', media: 'preview' },
+            prepare({ title, media }) {
+              return { title: title ?? 'PDF document', subtitle: 'PDF', media }
+            },
+          },
+        },
       ],
     }),
     defineField({
