@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { slugOptions, slugValidation } from './lib/slug'
 
 export const experienceSchema = defineType({
   name: 'experience',
@@ -15,8 +16,8 @@ export const experienceSchema = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title' },
-      validation: (r) => r.required(),
+      options: { source: 'title', ...slugOptions },
+      validation: slugValidation,
     }),
     defineField({
       name: 'studio',

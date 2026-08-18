@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { slugOptions, slugValidation } from './lib/slug'
 
 export const companySchema = defineType({
   name: 'company',
@@ -16,8 +17,8 @@ export const companySchema = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'name' },
-      validation: (r) => r.required(),
+      options: { source: 'name', ...slugOptions },
+      validation: slugValidation,
     }),
     defineField({
       name: 'category',

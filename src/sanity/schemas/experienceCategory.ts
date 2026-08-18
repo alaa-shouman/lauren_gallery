@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { slugOptions, slugValidation } from './lib/slug'
 
 export const experienceCategorySchema = defineType({
   name: 'experienceCategory',
@@ -23,9 +24,9 @@ export const experienceCategorySchema = defineType({
       name: 'slug',
       title: 'Key',
       type: 'slug',
-      options: { source: 'label' },
+      options: { source: 'label', ...slugOptions },
       description: 'Stable identifier — used internally to group projects. Do not change after projects are assigned.',
-      validation: (r) => r.required(),
+      validation: slugValidation,
     }),
     defineField({
       name: 'order',
