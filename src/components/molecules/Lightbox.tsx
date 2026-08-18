@@ -1,4 +1,6 @@
 import { useEffect, useCallback, useState, useRef } from 'react'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import type { ReactZoomPanPinchContentRef } from 'react-zoom-pan-pinch'
 
 interface LightboxImage {
   src: string
@@ -16,64 +18,46 @@ interface LightboxProps {
 
 const MIN_SCALE = 1
 const MAX_SCALE = 4
-const ZOOM_STEP = 0.5
 
 export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxProps) {
   const image = images[index]
   const [scale, setScale] = useState(1)
-  const imgRef = useRef<HTMLImageElement>(null)
+  const transformRef = useRef<ReactZoomPanPinchContentRef>(null)
 
-  const resetZoom = useCallback(() => setScale(1), [])
+  const zoomIn = useCallback(() => transformRef.current?.zoomIn(), [])
+  const zoomOut = useCallback(() => transformRef.current?.zoomOut(), [])
 
-  const zoomIn = useCallback(
-    () => setScale((s) => Math.min(s + ZOOM_STEP, MAX_SCALE)),
-    []
-  )
-  const zoomOut = useCallback(
-    () => setScale((s) => Math.max(s - ZOOM_STEP, MIN_SCALE)),
-    []
-  )
-
-  // Reset zoom when image changes
-  useEffect(() => { setScale(1) }, [index])
+  // Changing image remounts TransformWrapper via key={index}; mirror that by
+  // resetting the tracked scale during render (React's adjust-state-on-prop-change pattern).
+  const [prevIndex, setPrevIndex] = useState(index)
+  if (prevIndex !== index) {
+    setPrevIndex(index)
+    setScale(1)
+  }
 
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft') { resetZoom(); onPrev() }
-      if (e.key === 'ArrowRight') { resetZoom(); onNext() }
+      if (e.key === 'ArrowLeft') onPrev()
+      if (e.key === 'ArrowRight') onNext()
       if (e.key === '+' || e.key === '=') zoomIn()
       if (e.key === '-') zoomOut()
     },
-    [onClose, onPrev, onNext, resetZoom, zoomIn, zoomOut]
-  )
-
-  const handleWheel = useCallback(
-    (e: WheelEvent) => {
-      e.preventDefault()
-      setScale((s) => {
-        const delta = e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP
-        return Math.min(MAX_SCALE, Math.max(MIN_SCALE, s + delta))
-      })
-    },
-    []
+    [onClose, onPrev, onNext, zoomIn, zoomOut]
   )
 
   useEffect(() => {
     document.addEventListener('keydown', handleKey)
     document.body.style.overflow = 'hidden'
-    const el = imgRef.current
-    if (el) el.addEventListener('wheel', handleWheel, { passive: false })
     return () => {
       document.removeEventListener('keydown', handleKey)
       document.body.style.overflow = ''
-      if (el) el.removeEventListener('wheel', handleWheel)
     }
-  }, [handleKey, handleWheel])
+  }, [handleKey])
 
   if (!image) return null
 
-  const isZoomed = scale > 1
+  const isZoomed = scale > 1.01
 
   return (
     <dialog
@@ -85,26 +69,35 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
     >
       {/* Image container */}
       <div
-        className="relative max-w-5xl w-full flex items-center justify-center"
+        className="relative max-w-5xl w-full h-[75vh]"
         onClick={(e) => e.stopPropagation()}
+        style={{ touchAction: 'none' }}
       >
-        <img
-          ref={imgRef}
-          src={image.src}
-          alt={image.alt}
-          className="max-h-[75vh] object-contain rounded-xl select-none"
-          style={{
-            transform: `scale(${scale})`,
-            transition: 'transform 0.2s ease',
-            cursor: isZoomed ? 'zoom-out' : 'default',
-            maxWidth: '100%',
-          }}
-          draggable={false}
-          onClick={isZoomed ? resetZoom : undefined}
-        />
+        <TransformWrapper
+          key={index}
+          ref={transformRef}
+          minScale={MIN_SCALE}
+          maxScale={MAX_SCALE}
+          centerOnInit
+          doubleClick={{ mode: 'toggle' }}
+          onTransform={(_ref, state) => setScale(state.scale)}
+        >
+          <TransformComponent
+            wrapperStyle={{ width: '100%', height: '100%' }}
+            contentStyle={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              className="max-h-full max-w-full object-contain rounded-xl select-none"
+              style={{ cursor: isZoomed ? 'grab' : 'zoom-in' }}
+              draggable={false}
+            />
+          </TransformComponent>
+        </TransformWrapper>
 
         {image.caption && !isZoomed && (
-          <div className="absolute -bottom-10 left-0 right-0 flex flex-col items-center gap-0.5 px-4">
+          <div className="absolute -bottom-10 left-0 right-0 flex flex-col items-center gap-0.5 px-4 pointer-events-none">
             <p className="text-center text-sm text-earth-cream/80 font-light leading-snug max-w-lg">
               {image.caption}
             </p>
@@ -129,9 +122,12 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
       </button>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-earth-forest/60 rounded-full px-3 py-1.5 backdrop-blur-sm">
+      <div
+        className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-earth-forest/60 rounded-full px-3 py-1.5 backdrop-blur-sm"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
-          onClick={(e) => { e.stopPropagation(); zoomOut() }}
+          onClick={zoomOut}
           disabled={scale <= MIN_SCALE}
           aria-label="Zoom out"
           className="w-7 h-7 flex items-center justify-center text-earth-cream/70 hover:text-earth-cream disabled:opacity-30 transition-colors duration-200"
@@ -144,7 +140,7 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
           {Math.round(scale * 100)}%
         </span>
         <button
-          onClick={(e) => { e.stopPropagation(); zoomIn() }}
+          onClick={zoomIn}
           disabled={scale >= MAX_SCALE}
           aria-label="Zoom in"
           className="w-7 h-7 flex items-center justify-center text-earth-cream/70 hover:text-earth-cream disabled:opacity-30 transition-colors duration-200"
@@ -159,7 +155,7 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
       {images.length > 1 && (
         <>
           <button
-            onClick={(e) => { e.stopPropagation(); resetZoom(); onPrev() }}
+            onClick={(e) => { e.stopPropagation(); onPrev() }}
             aria-label="Previous image"
             className="absolute left-3 top-1/2 -translate-y-1/2 text-earth-cream/60 hover:text-earth-cream transition-colors duration-200 p-3"
           >
@@ -168,7 +164,7 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
             </svg>
           </button>
           <button
-            onClick={(e) => { e.stopPropagation(); resetZoom(); onNext() }}
+            onClick={(e) => { e.stopPropagation(); onNext() }}
             aria-label="Next image"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-earth-cream/60 hover:text-earth-cream transition-colors duration-200 p-3"
           >

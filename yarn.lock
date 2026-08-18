@@ -7549,6 +7549,11 @@ react-rx@^4.1.30:
     react-compiler-runtime "1.0.0"
     use-effect-event "^2.0.3"
 
+react-zoom-pan-pinch@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-4.0.4.tgz#d3f3a7e4ab6703cf72e3c285ee6b940908c86b6a"
+  integrity sha512-P0D7lfNHyJCNuUozoVdt0WNWcQ34ZbbD71B8pb+UtF7Th8MKBnxYiPApDfPZZmr+Gk0l0WmGTXL8R36JirHcQQ==
+
 react@^19.2.6:
   version "19.2.6"
   resolved "https://registry.yarnpkg.com/react/-/react-19.2.6.tgz#3dadb8e12b2a7934c1d5317973e5dce1301f9a4d"
