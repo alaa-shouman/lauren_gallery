@@ -83,8 +83,10 @@ function ExperienceTab({ exp, index, onClick }: ExperienceTabProps) {
         <p className="text-xs text-grey-light mb-2">
           {[exp.studio, exp.year, exp.location].filter(Boolean).join(' · ')}
         </p>
+        {/* max-md:hidden (not `hidden md:block`) — md:block would override the
+            display:-webkit-box that line-clamp needs, disabling the clamp. */}
         {exp.description && (
-          <p className="hidden md:block text-sm text-grey-mid font-light leading-snug line-clamp-1">
+          <p className="max-md:hidden text-sm text-grey-mid font-light leading-snug line-clamp-1">
             {exp.description}
           </p>
         )}
