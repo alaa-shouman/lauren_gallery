@@ -80,12 +80,14 @@ function GalleryImage({ src, lqip, aspectRatio, alt, caption, index, total, onCl
 }) {
   return (
     <figure className="group max-w-full">
-      {/* Fixed row height + aspect-ratio on the SAME element — Safari can't
-          resolve the ratio against a percentage height on a child. */}
+      {/* Explicit width = rowHeight × ratio via calc(). Safari fails to derive
+          a width from `aspect-ratio` for flex-item content, collapsing tiles
+          to 0 — calc() against the --ar variable is deterministic everywhere.
+          The rem values must match the h-44/h-64/h-72 row heights. */}
       <button
         onClick={onClick}
-        className="relative overflow-hidden rounded-xl block h-44 md:h-64 lg:h-72 max-w-full"
-        style={{ aspectRatio: aspectRatio ?? 4 / 3 }}
+        className="relative overflow-hidden rounded-xl block h-44 w-[calc(11rem*var(--ar))] md:h-64 md:w-[calc(16rem*var(--ar))] lg:h-72 lg:w-[calc(18rem*var(--ar))] max-w-full"
+        style={{ '--ar': aspectRatio ?? 4 / 3 } as React.CSSProperties}
         aria-label={`View image ${index + 1} of ${total} fullscreen`}
       >
         <ProgressiveImage
@@ -116,8 +118,8 @@ function GalleryPdfTile({ item, index, onClick }: { item: GalleryPdfItem; index:
     <figure className="group max-w-full">
       <button
         onClick={onClick}
-        className="relative overflow-hidden rounded-xl block h-44 md:h-64 lg:h-72 max-w-full"
-        style={{ aspectRatio: item.aspectRatio ?? 3 / 4 }}
+        className="relative overflow-hidden rounded-xl block h-44 w-[calc(11rem*var(--ar))] md:h-64 md:w-[calc(16rem*var(--ar))] lg:h-72 lg:w-[calc(18rem*var(--ar))] max-w-full"
+        style={{ '--ar': item.aspectRatio ?? 3 / 4 } as React.CSSProperties}
         aria-label={`Open PDF document: ${item.title}`}
       >
         {item.src ? (
