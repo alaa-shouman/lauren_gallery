@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
   },
   galleryImage: {
     width: '100%',
-    height: 165, // Square aspect ratio
-    objectFit: 'cover',
+    height: 165,
+    objectFit: 'contain', // letterbox rather than crop — photos keep their full frame
     borderRadius: 6,
   },
   captionRow: {

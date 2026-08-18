@@ -5,6 +5,7 @@ import { experienceBySlugQuery, allExperiencesQuery } from '@/sanity/queries/exp
 import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
 import { urlFor } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
+import { ProgressiveImage } from '@/components/molecules/ProgressiveImage'
 import { useFadeIn } from '@/hooks/useFadeIn'
 import { useSeo, browserSeoOpts } from '@/hooks/useSeo'
 import { experienceSeo } from '@/lib/seo'
@@ -46,21 +47,23 @@ function InfoCard({ label, value }: { label: string; value: string }) {
   )
 }
 
-function GalleryImage({ src, alt, caption, index, total, onClick }: {
-  src: string; alt: string; caption?: string; index: number; total: number; onClick: () => void
+function GalleryImage({ src, lqip, aspectRatio, alt, caption, index, total, onClick }: {
+  src: string; lqip?: string; aspectRatio?: number; alt: string; caption?: string
+  index: number; total: number; onClick: () => void
 }) {
   return (
-    <figure className="group">
+    <figure className="group break-inside-avoid mb-3 md:mb-4">
       <button
         onClick={onClick}
-        className="relative aspect-square overflow-hidden rounded-xl bg-earth-sand block w-full"
+        className="relative overflow-hidden rounded-xl block w-full"
         aria-label={`View image ${index + 1} of ${total} fullscreen`}
       >
-        <img
+        <ProgressiveImage
           src={src}
           alt={alt}
-          loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          lqip={lqip}
+          aspectRatio={aspectRatio ?? 4 / 3}
+          className="transition-transform duration-500 group-hover:scale-[1.02]"
         />
       </button>
       {/* Editorial label — figure index + optional caption, always visible */}
@@ -128,23 +131,35 @@ export function ExperienceDetailPage() {
     }
   }
 
-  const galleryImages: { src: string; alt: string; caption?: string }[] = (() => {
+  const galleryImages: {
+    src: string; fullSrc: string; alt: string; caption?: string; lqip?: string; aspectRatio?: number
+  }[] = (() => {
     if (!slug) return []
     const sanityImages = exp?.gallery?.filter((img) => img?.asset) ?? []
-    
+
     if (sanityImages.length > 0) {
-      return sanityImages.map((si, i) => ({
-        src: urlFor(si).width(900).height(700).fit('crop').url(),
-        alt: si.alt ?? `${exp?.title ?? 'Project'} — image ${i + 1}`,
-        caption: si.caption,
-      }))
+      // fit('max') = resize within the given width, never crop, never upscale
+      // beyond the uploaded original — photos keep their native aspect ratio.
+      return sanityImages.map((si, i) => {
+        const dims = si.asset.metadata?.dimensions
+        return {
+          src: urlFor(si).width(1400).fit('max').auto('format').quality(85).url(),
+          fullSrc: urlFor(si).width(2560).fit('max').auto('format').quality(90).url(),
+          alt: si.alt ?? `${exp?.title ?? 'Project'} — image ${i + 1}`,
+          caption: si.caption,
+          lqip: si.asset.metadata?.lqip,
+          aspectRatio: dims ? dims.width / dims.height : undefined,
+        }
+      })
     } else {
       const seeds = PICSUM_SEEDS[slug] ?? []
       const count = Math.max(seeds.length, 6)
       return Array.from({ length: count }).map((_, i) => ({
         src: getPicsumUrl(slug, i),
+        fullSrc: getPicsumUrl(slug, i, 1800, 1400),
         alt: `${exp?.title ?? 'Project'} — image ${i + 1}`,
         caption: undefined,
+        aspectRatio: 900 / 700,
       }))
     }
   })()
@@ -380,11 +395,14 @@ export function ExperienceDetailPage() {
                   {galleryImages.length} image{galleryImages.length !== 1 ? 's' : ''} · tap to enlarge
                 </span>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+              {/* CSS-columns masonry — each photo keeps its natural aspect ratio */}
+              <div className="columns-2 md:columns-3 gap-3 md:gap-4">
                 {galleryImages.map((img, i) => (
                   <GalleryImage
                     key={i}
                     src={img.src}
+                    lqip={img.lqip}
+                    aspectRatio={img.aspectRatio}
                     alt={img.alt}
                     caption={img.caption}
                     index={i}
@@ -467,7 +485,7 @@ export function ExperienceDetailPage() {
         {/* Lightbox */}
         {lightboxIndex !== null && galleryImages.length > 0 && (
           <Lightbox
-            images={galleryImages}
+            images={galleryImages.map((img) => ({ ...img, src: img.fullSrc }))}
             index={lightboxIndex}
             onClose={closeLightbox}
             onPrev={prevImage}
