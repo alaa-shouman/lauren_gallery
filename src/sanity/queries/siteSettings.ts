@@ -5,7 +5,7 @@ export const siteSettingsQuery = groq`
     name,
     siteTitle,
     metaDescription,
-    ogImage { asset->, alt },
+    ogImage { asset->, crop, hotspot, alt },
     socialLinks,
     email,
     footerTagline,

@@ -5,7 +5,7 @@ export const aboutQuery = groq`
     sectionLabel,
     bio,
     processSteps,
-    portrait { asset->, alt },
-    signatureImage { asset->, alt }
+    portrait { asset->, crop, hotspot, alt },
+    signatureImage { asset->, crop, hotspot, alt }
   }
 `

@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useSanity } from '@/hooks/useSanity'
 import { experienceBySlugQuery, allExperiencesQuery } from '@/sanity/queries/experience'
 import { siteSettingsQuery } from '@/sanity/queries/siteSettings'
-import { urlFor } from '@/sanity/lib/image'
+import { urlFor, imageAspectRatio } from '@/sanity/lib/image'
 import { Lightbox } from '@/components/molecules/Lightbox'
 import { ProgressiveImage } from '@/components/molecules/ProgressiveImage'
 import { PdfViewer } from '@/components/molecules/PdfViewer'
@@ -225,7 +225,6 @@ export function ExperienceDetailPage() {
       if (isGalleryDocument(entry)) {
         if (!entry.fileUrl) continue
         const preview = entry.preview?.asset ? entry.preview : undefined
-        const dims = preview?.asset.metadata?.dimensions
         items.push({
           kind: 'pdf',
           title: entry.title,
@@ -233,12 +232,12 @@ export function ExperienceDetailPage() {
           caption: entry.caption,
           src: preview ? urlFor(preview).width(1400).fit('max').auto('format').quality(85).url() : undefined,
           lqip: preview?.asset.metadata?.lqip,
-          aspectRatio: dims ? dims.width / dims.height : undefined,
+          aspectRatio: preview ? imageAspectRatio(preview) : undefined,
         })
       } else if (entry.asset) {
         // fit('max') = resize within the given width, never crop, never upscale
-        // beyond the uploaded original — photos keep their native aspect ratio.
-        const dims = entry.asset.metadata?.dimensions
+        // beyond the uploaded original — photos keep their native aspect ratio
+        // (the Studio crop rect, when the editor sets one, is applied by urlFor).
         items.push({
           kind: 'image',
           src: urlFor(entry).width(1400).fit('max').auto('format').quality(85).url(),
@@ -246,7 +245,7 @@ export function ExperienceDetailPage() {
           alt: entry.alt ?? `${exp?.title ?? 'Project'} — image ${lightboxIndex + 1}`,
           caption: entry.caption,
           lqip: entry.asset.metadata?.lqip,
-          aspectRatio: dims ? dims.width / dims.height : undefined,
+          aspectRatio: imageAspectRatio(entry),
           lightboxIndex: lightboxIndex++,
         })
       }

@@ -7,7 +7,7 @@ export const allCompaniesQuery = groq`
     "slug": slug.current,
     order,
     description,
-    logo { asset->, alt },
+    logo { asset->, crop, hotspot, alt },
     "categoryId": category->_id
   }
 `

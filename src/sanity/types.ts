@@ -9,6 +9,9 @@ export interface SanityImage {
       lqip?: string
     }
   }
+  /** Studio crop editor output — fractions (0–1) trimmed from each edge. */
+  crop?: { top: number; bottom: number; left: number; right: number }
+  hotspot?: { x: number; y: number; height: number; width: number }
   alt?: string
   caption?: string
 }

@@ -24,7 +24,7 @@ export const allExperiencesQuery = groq`
     },
     order,
     externalUrl,
-    coverImage { asset->, alt },
+    coverImage { asset->, crop, hotspot, alt },
     "galleryCount": count(gallery)
   }
 `
@@ -53,18 +53,18 @@ export const experienceBySlugQuery = groq`
       name,
       "slug": slug.current,
       order,
-      logo { asset->, alt }
+      logo { asset->, crop, hotspot, alt }
     },
     externalUrl,
-    coverImage { asset->, alt },
+    coverImage { asset->, crop, hotspot, alt },
     gallery[] {
       _type,
-      _type == "image" => { asset->, alt, caption },
+      _type == "image" => { asset->, crop, hotspot, alt, caption },
       _type == "galleryDocument" => {
         title,
         caption,
         "fileUrl": file.asset->url,
-        preview { asset->, alt }
+        preview { asset->, crop, hotspot, alt }
       }
     },
     projectPdf { asset-> }
