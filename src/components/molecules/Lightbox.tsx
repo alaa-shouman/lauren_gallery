@@ -22,6 +22,7 @@ const MAX_SCALE = 4
 export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxProps) {
   const image = images[index]
   const [scale, setScale] = useState(1)
+  const [showCaption, setShowCaption] = useState(true)
   const transformRef = useRef<ReactZoomPanPinchContentRef>(null)
 
   const zoomIn = useCallback(() => transformRef.current?.zoomIn(), [])
@@ -42,6 +43,7 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
       if (e.key === 'ArrowRight') onNext()
       if (e.key === '+' || e.key === '=') zoomIn()
       if (e.key === '-') zoomOut()
+      if (e.key === 'c' || e.key === 'C') setShowCaption((v) => !v)
     },
     [onClose, onPrev, onNext, zoomIn, zoomOut]
   )
@@ -62,14 +64,14 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
   return (
     <dialog
       open
-      className="fixed inset-0 z-100 m-0 max-w-none w-full h-full bg-earth-forest/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+      className="fixed inset-0 z-100 m-0 max-w-none w-full h-full bg-earth-forest/95 backdrop-blur-sm flex flex-col items-center justify-center gap-4 px-4 pt-14 pb-16 md:px-8"
       onClick={() => { if (!isZoomed) onClose() }}
       aria-modal="true"
       aria-label="Image lightbox"
     >
       {/* Image container */}
       <div
-        className="relative max-w-5xl w-full h-[75vh]"
+        className="relative max-w-5xl w-full flex-1 min-h-0"
         onClick={(e) => e.stopPropagation()}
         style={{ touchAction: 'none' }}
       >
@@ -96,19 +98,33 @@ export function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxPro
           </TransformComponent>
         </TransformWrapper>
 
-        {image.caption && !isZoomed && (
-          <div className="absolute -bottom-10 left-0 right-0 flex flex-col items-center gap-0.5 px-4 pointer-events-none">
-            <p className="text-center text-sm text-earth-cream/80 font-light leading-snug max-w-lg">
-              {image.caption}
-            </p>
-          </div>
-        )}
       </div>
+
+      {image.caption && showCaption && (
+        <p
+          className="shrink-0 max-w-lg text-center text-sm text-earth-cream/90 font-light leading-snug px-4 py-2 rounded-lg bg-earth-forest/70"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {image.caption}
+        </p>
+      )}
 
       {/* Counter */}
       <p className="absolute top-5 left-1/2 -translate-x-1/2 text-xs text-earth-cream/40 tracking-widest pointer-events-none">
         {index + 1} / {images.length}
       </p>
+
+      {/* Caption toggle */}
+      {image.caption && (
+        <button
+          onClick={(e) => { e.stopPropagation(); setShowCaption((v) => !v) }}
+          aria-pressed={showCaption}
+          aria-label={showCaption ? 'Hide caption' : 'Show caption'}
+          className="absolute top-5 right-14 text-xs tracking-widest uppercase text-earth-cream/60 hover:text-earth-cream transition-colors duration-200 p-1"
+        >
+          {showCaption ? 'Hide caption' : 'Show caption'}
+        </button>
+      )}
 
       {/* Close */}
       <button
